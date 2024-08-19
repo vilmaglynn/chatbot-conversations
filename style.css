@@ -1,6 +1,127 @@
+/* Background Styling */
 body {
-  background-image: url(./images/background-white.jpg);
+  background-image: url(./images/background-blue2.jpg);
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+  margin: 0;
+  padding: 0;
+  font-family: "Roboto", sans-serif; /* Modern font */
+  color: #e0e0e0; /* Light text color */
+}
 
-  background-repeat: no-repeat; /* Prevents the image from repeating */
-  background-position: center; /* Centers the image within the element */
+/* Form Styling */
+/* Form Styling */
+#botgender {
+  background-color: rgba(255, 255, 255, 0.156);
+  padding: 20px;
+  border-radius: 10px;
+  margin-top: 40px;
+  width: 100%;
+  max-width: 400px; /* Limit the width of the form */
+  text-align: left; /* Align the labels and radio buttons to the left */
+  margin-left: auto;
+  margin-right: auto; /* Center the form on the page */
+}
+
+/* Center the heading */
+#botgender h1 {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+/* Main Container Styling */
+.main-container {
+  display: flex;
+  align-items: center;
+  justify-content: center; /* Center the content horizontally */
+  flex-direction: column;
+  min-height: 100vh; /* Full height of the viewport */
+}
+
+/* Bot and Chatbox Container */
+.botandchat {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(0, 0, 0, 0.7); /* Semi-transparent black background */
+  height: 550px;
+  width: 1050px;
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0 0 20px rgba(0, 255, 255, 0.4); /* Glowing box shadow */
+  backdrop-filter: blur(10px); /* Frosted glass effect */
+}
+
+.botandchat:hover {
+  box-shadow: 0 0 30px rgba(0, 255, 255, 0.4); /* Glowing box shadow */
+  backdrop-filter: blur(20px); /* Frosted glass effect */
+}
+/* Image Container Styling */
+#imageContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 500px;
+  height: 500px;
+  margin-right: 20px; /* Space between image and chatbox */
+  background-color: rgba(255, 255, 255, 0.1); /* Semi-transparent background */
+  border-radius: 10px;
+  overflow: hidden; /* Ensure the image stays within the container */
+  box-shadow: 0 0 15px rgba(0, 255, 255, 0.3); /* Glowing border */
+}
+
+img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* Ensure the image covers the container */
+  display: none;
+}
+
+/* Chatbox Styling */
+.chatbox {
+  width: 500px;
+  height: 500px;
+  border-radius: 10px;
+  border: 2px solid #0ff; /* Neon border color */
+  box-shadow: 0 0 15px rgba(0, 255, 255, 0.3); /* Glowing border */
+  box-sizing: border-box;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+/* Button Styling */
+#startButton {
+  align-self: center; /* Center the button inside the chatbox */
+  padding: 10px 20px;
+  background-color: #0ff; /* Neon background */
+  color: #000;
+  border: none;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 255, 255, 0.6); /* Glowing effect */
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+#startButton:hover {
+  background-color: #00cccc; /* Slightly darker on hover */
+}
+
+/* Output Areas */
+#outputUser,
+#outputRobot {
+  margin-top: 10px;
+  flex-grow: 1;
+  padding: 10px;
+  background-color: rgba(
+    255,
+    255,
+    255,
+    0.761
+  ); /* Semi-transparent background */
+  border: 1px solid #0ff; /* Neon border */
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 255, 255, 0.3); /* Glowing effect */
 }

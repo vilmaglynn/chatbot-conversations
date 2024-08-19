@@ -10,18 +10,39 @@
 
 <body>
 	<div class="main-container">
-		<form>
+		<form id="botgender">
 			<h1>Choose your iBot</h1>
-			<input type="radio" id="female" name="choose_gender" value="female">
-			<label for="female">female</label><br>
-			<input type="radio" id="male" name="choose_gender" value="male">
-			<label for="male">male</label><br>
-			<input type="radio" id="other" name="choose_gender" value="other">
-			<label for="other">other</label>
+			<label>
+				<input type="radio" name="image" value="female">
+				Female
+			</label>
+			<br>
+			<label>
+				<input type="radio" name="image" value="male">
+				Male
+			</label>
+			<br>
+			<label>
+				<input type="radio" name="image" value="other">
+				Other
+			</label>
 		</form>
-		<div class="iRobot"></div>
-		<button id="startButton">Start Voice Input</button>
-		<div id="output"></div>
+		<div class="botandchat">
+			<div class="iRobot">
+				<div id="imageContainer">
+					<h2></h2>
+					<img id="female" src="./images/female1.jpg" alt="Image 1">
+					<img id="male" src="./images/male1.jpg" alt="Image 2">
+					<img id="other" src="./images/other1.jpg" alt="Image 3">
+				</div>
+			</div>
+			<div class="chatbox">
+				<button id="startButton">Start Voice Input</button>
+				<div id="outputUser"></div>
+				<div id="outputRobot"></div>
+			</div>
+		</div>
+
 
 	</div>
 
