@@ -1,56 +1,97 @@
-<!DOCTYPE female>
-<HTML lang="en">
+<!DOCTYPE html>
+<html lang="en">
 
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>Chatbot</title>
 	<link rel="stylesheet" href="./style.css">
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link
+		href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400..900&family=Rowdies:wght@300;400;700&display=swap"
+		rel="stylesheet">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
+		integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg=="
+		crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 
 <body>
 	<div class="main-container">
 		<form id="botgender">
 			<h1>Choose your iBot</h1>
-			<label>
-				<input type="radio" name="image" value="female">
-				Female
-			</label>
-			<br>
-			<label>
-				<input type="radio" name="image" value="male">
-				Male
-			</label>
-			<br>
-			<label>
-				<input type="radio" name="image" value="other">
-				Other
-			</label>
+
+			<div class="radio-group">
+				<label>
+					<input type="radio" name="image" value="cartoon">
+					<span>Cartoon</span>
+				</label>
+				<label>
+					<input type="radio" name="image" value="female">
+					<span>Female</span>
+				</label>
+				<label>
+					<input type="radio" name="image" value="male">
+					<span>Male</span>
+				</label>
+				<label>
+					<input type="radio" name="image" value="other">
+					<span>Other</span>
+				</label>
+				<label>
+					<input type="radio" name="image" value="scary">
+					<span>Scary</span>
+				</label>
+			</div>
+
+			<button id="background">Change background</button>
+
 		</form>
+
 		<div class="botandchat">
 			<div class="iRobot">
 				<div id="imageContainer">
-					<h2></h2>
-					<img id="female" src="./images/female1.jpg" alt="Image 1">
-					<img id="male" src="./images/male1.jpg" alt="Image 2">
-					<img id="other" src="./images/other1.jpg" alt="Image 3">
+					<h2>Name of bot</h2>
+					<img id="female" src="./images/femalebots/female1.jpg" alt="Image 1">
+					<img id="male" src="./images/malebots/male1.jpg" alt="Image 2">
+					<img id="other" src="./images/otherbots/other1.jpg" alt="Image 3">
+					<img id="scary" src="./images/scary/scary1.jpg" alt="Image 3">
+					<img id="cartoon" src="./images/cartoon/cartoon1.jpg" alt="Image 3">
 				</div>
 			</div>
 			<div class="chatbox">
-				<button id="startButton">Start Voice Input</button>
-				<div id="outputUser"></div>
-				<div id="outputRobot"></div>
+				<div id="inputContainer">
+					<div class="labelChat">
+						<p>You</p>
+					</div>
+					<form action="/submit" method="post">
+						<textarea id="userMessage" name="message" rows="4" cols="50"
+							placeholder="Type your message here..." required></textarea>
+						<div>
+							<!-- Voice input button -->
+							<button id="voiceInputButton">
+								<i class="fa-solid fa-microphone"></i>
+							</button>
+							<!-- Send button with Font Awesome icon -->
+							<button id="textSubmit">
+								<i class="fa-solid fa-paper-plane"></i>
+							</button>
+
+						</div>
+
+					</form>
+				</div>
+				<div id="botContainer">
+					<div class="labelChat">
+						<p>Bot</p>
+					</div>
+					<div id="botMessage"></div>
+				</div>
 			</div>
 		</div>
-
-
 	</div>
 
 	<script src="./script.js"></script>
-
-	<!-- <a
-		href="https://www.freepik.com/free-vector/white-technology-background_6402686.htm#query=technology%20background%20white&position=0&from_view=keyword&track=ais_hybrid&uuid=fd0258e0-93f6-44ca-9ee7-7fd5266ac22c">Image
-		by freepik</a> -->
 </body>
 
-</HTML>
+</html>

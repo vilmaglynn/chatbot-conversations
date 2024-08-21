@@ -1,42 +1,75 @@
 /* Background Styling */
 body {
-  background-image: url(./images/background-blue2.jpg);
+  background-image: linear-gradient(rgba(0, 0, 0, 0.222), rgba(0, 0, 0, 0.5)),
+    url(./images/backgrounds/background-blue1.jpg);
   background-repeat: no-repeat;
   background-position: center;
   background-size: cover;
   margin: 0;
   padding: 0;
-  font-family: "Roboto", sans-serif; /* Modern font */
-  color: #e0e0e0; /* Light text color */
+  font-family: "Rowdies", sans-serif;
 }
 
-/* Form Styling */
-/* Form Styling */
+/* Selecting the bot type*/
 #botgender {
-  background-color: rgba(255, 255, 255, 0.156);
+  color: #0ff;
+  background-color: rgba(0, 0, 0, 0.8);
   padding: 20px;
-  border-radius: 10px;
-  margin-top: 40px;
+  border-radius: 15px;
+  margin: 40px auto;
   width: 100%;
-  max-width: 400px; /* Limit the width of the form */
-  text-align: left; /* Align the labels and radio buttons to the left */
-  margin-left: auto;
-  margin-right: auto; /* Center the form on the page */
+  max-width: 400px;
+  text-align: center;
+  box-shadow: 0 0 20px rgba(0, 255, 255, 0.5);
 }
 
-/* Center the heading */
+/* Selecting the bot type*/
 #botgender h1 {
-  text-align: center;
   margin-bottom: 20px;
+  font-family: "Orbitron", sans-serif;
+  font-size: 1.8em;
+  color: #0ff;
+  text-shadow: 0 0 10px rgba(0, 255, 255, 0.7);
+}
+
+.radio-group label {
+  cursor: pointer;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.radio-group input[type="radio"] {
+  accent-color: #0ff;
+  transform: scale(1.2);
+}
+
+/* Selecting the background*/
+#botgender button {
+  margin-top: 20px;
+  padding: 8px;
+  background-color: #0ff;
+  color: #000;
+  border: none;
+  border-radius: 8px;
+  box-shadow: 0 0 20px rgba(0, 255, 255, 0.6);
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+  font-family: "Orbitron", sans-serif;
+  font-size: 1.2em;
+}
+
+#botgender button:hover {
+  background-color: #00cccc;
+  transform: scale(1.05);
 }
 
 /* Main Container Styling */
 .main-container {
   display: flex;
   align-items: center;
-  justify-content: center; /* Center the content horizontally */
+  justify-content: center;
   flex-direction: column;
-  min-height: 100vh; /* Full height of the viewport */
+  min-height: 100vh;
+  padding: 20px;
 }
 
 /* Bot and Chatbox Container */
@@ -44,19 +77,21 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: rgba(0, 0, 0, 0.7); /* Semi-transparent black background */
+  background-color: rgba(0, 0, 0, 0.7);
   height: 550px;
   width: 1050px;
   border-radius: 10px;
   padding: 20px;
-  box-shadow: 0 0 20px rgba(0, 255, 255, 0.4); /* Glowing box shadow */
-  backdrop-filter: blur(10px); /* Frosted glass effect */
+  box-shadow: 0 0 20px rgba(0, 255, 255, 0.4);
+  backdrop-filter: blur(10px);
+  margin-bottom: 30px;
 }
 
 .botandchat:hover {
-  box-shadow: 0 0 30px rgba(0, 255, 255, 0.4); /* Glowing box shadow */
-  backdrop-filter: blur(20px); /* Frosted glass effect */
+  box-shadow: 0 0 30px rgba(0, 255, 255, 0.4);
+  backdrop-filter: blur(20px);
 }
+
 /* Image Container Styling */
 #imageContainer {
   display: flex;
@@ -64,18 +99,35 @@ body {
   justify-content: center;
   width: 500px;
   height: 500px;
-  margin-right: 20px; /* Space between image and chatbox */
-  background-color: rgba(255, 255, 255, 0.1); /* Semi-transparent background */
+  margin-right: 30px;
+  background-color: rgba(41, 39, 39, 0.191);
   border-radius: 10px;
-  overflow: hidden; /* Ensure the image stays within the container */
-  box-shadow: 0 0 15px rgba(0, 255, 255, 0.3); /* Glowing border */
+  overflow: hidden;
+  position: relative;
+  box-shadow: 0 0 15px rgba(0, 255, 255, 0.3);
 }
 
 img {
   width: 100%;
   height: 100%;
-  object-fit: cover; /* Ensure the image covers the container */
+  object-fit: cover;
   display: none;
+}
+
+/* Bot Name Styling */
+#imageContainer h2 {
+  position: absolute;
+  bottom: 0px;
+  left: 50%;
+  transform: translateX(-50%);
+  color: white;
+  background-color: rgba(0, 0, 0, 0.7);
+  padding: 20px;
+  border-radius: 5px;
+  font-family: "Orbitron", sans-serif;
+  font-size: 1.2em;
+  text-align: center;
+  width: 100%;
 }
 
 /* Chatbox Styling */
@@ -83,45 +135,95 @@ img {
   width: 500px;
   height: 500px;
   border-radius: 10px;
-  border: 2px solid #0ff; /* Neon border color */
-  box-shadow: 0 0 15px rgba(0, 255, 255, 0.3); /* Glowing border */
+
+  box-shadow: 0 0 15px rgba(0, 255, 255, 0.3);
   box-sizing: border-box;
-  padding: 20px;
+
   display: flex;
   flex-direction: column;
   justify-content: space-between;
 }
 
+/* Input User Styling */
+#inputContainer {
+  height: 250px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  background-color: rgba(255, 255, 255, 0.1);
+  border: 1px solid #0ff;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 255, 255, 0.3);
+  padding: 10px;
+}
+
+#inputContainer form {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+#userMessage {
+  padding: 10px;
+  background-color: rgba(0, 0, 0, 0.7);
+  border: 1px solid #0ff;
+  border-radius: 5px;
+  color: white;
+  font-family: "Rowdies", sans-serif;
+  font-size: 1em;
+  max-height: 150px;
+  height: 150px;
+}
+
 /* Button Styling */
-#startButton {
-  align-self: center; /* Center the button inside the chatbox */
+#textSubmit,
+#voiceInputButton {
+  margin-left: 10px;
   padding: 10px 20px;
-  background-color: #0ff; /* Neon background */
+  background-color: #0ff;
   color: #000;
   border: none;
   border-radius: 5px;
-  box-shadow: 0 0 10px rgba(0, 255, 255, 0.6); /* Glowing effect */
+  box-shadow: 0 0 10px rgba(0, 255, 255, 0.6);
   cursor: pointer;
   transition: background-color 0.3s ease;
 }
 
-#startButton:hover {
-  background-color: #00cccc; /* Slightly darker on hover */
+#textSubmit,
+#voiceInputButton:hover {
+  background-color: #00cccc;
 }
 
-/* Output Areas */
-#outputUser,
-#outputRobot {
-  margin-top: 10px;
-  flex-grow: 1;
-  padding: 10px;
-  background-color: rgba(
-    255,
-    255,
-    255,
-    0.761
-  ); /* Semi-transparent background */
-  border: 1px solid #0ff; /* Neon border */
+/* Label Chat Styling */
+.labelChat {
+  width: 100%;
+  background-color: rgba(0, 0, 0, 0.529);
+  color: white;
+  font-family: "Orbitron", sans-serif;
+  font-size: 1.1em;
+  text-align: center;
+  border: 1px solid #0ff;
   border-radius: 5px;
-  box-shadow: 0 0 10px rgba(0, 255, 255, 0.3); /* Glowing effect */
+  box-shadow: 0 0 8px rgba(0, 255, 255, 0.5);
+}
+
+/* Output Robot Styling */
+#botContainer {
+  flex-grow: 1;
+  background-color: rgba(255, 255, 255, 0.1);
+  border: 1px solid #0ff;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 255, 255, 0.3);
+  padding: 10px;
+  height: 250px;
+}
+
+#botMessage {
+  max-height: 150px;
+  height: 150px;
+  padding: 10px;
+  background-color: rgba(0, 0, 0, 0.7);
+  border: 1px solid #0ff;
+  border-radius: 5px;
+  color: white;
 }
