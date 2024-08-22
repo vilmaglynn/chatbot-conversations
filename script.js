@@ -1,85 +1,197 @@
 document.addEventListener("DOMContentLoaded", function () {
-  // Select the form
-  const form = document.getElementById("botgender");
-  // Get references to the images
-  const images = {
-    female: document.getElementById("female"),
-    male: document.getElementById("male"),
-    other: document.getElementById("other"),
-    scary: document.getElementById("scary"),
-    cartoon: document.getElementById("cartoon")
-  };
-
-  // Listen for any change on the radio buttons
-  form.addEventListener("change", function (event) {
-    // Hide all images initially
-    for (let key in images) {
-      images[key].style.display = "none";
-    }
-
-    // Get the value of the selected radio button
-    const selectedValue = event.target.value;
-
-    // Show the corresponding image based on the selected radio button
-    if (images[selectedValue]) {
-      images[selectedValue].style.display = "block";
-    }
-  });
+  // Initialize all functions on DOMContentLoaded
+  initializeBotSelection();
+  initializeVoiceRecognition();
+  initializeBackgroundChange();
+  initializeSettingsToggle();
 });
 
-document
-  .getElementById("voiceInputButton")
-  .addEventListener("click", function () {
-    var recognition = new (window.SpeechRecognition ||
+// Function to initialize bot selection
+function initializeBotSelection() {
+  const botCategories = getBotCategories();
+  const typeRadios = document.querySelectorAll('input[name="image"]');
+  const botNamesContainer = createBotNamesContainer();
+
+  typeRadios.forEach((radio) => {
+    radio.addEventListener("change", function () {
+      const selectedCategory = botCategories[radio.value];
+      if (selectedCategory) {
+        displayBotNames(selectedCategory, botNamesContainer);
+      }
+    });
+  });
+}
+
+// Returns an object containing bot categories
+function getBotCategories() {
+  return {
+    cartoon: [
+      { name: "RoboSparkle", image: "./images/cartoon/cartoon1.jpg" },
+      { name: "GigaGizmo", image: "./images/cartoon/cartoon2.jpg" },
+      { name: "CircuitBuddy", image: "./images/cartoon/cartoon3.jpg" },
+      { name: "PixelBot", image: "./images/cartoon/cartoon4.jpg" }
+    ],
+    female: [
+      { name: "CyberLuna", image: "./images/femalebots/female1.jpg" },
+      { name: "VegaVixen", image: "./images/femalebots/female2.jpg" },
+      { name: "NebulaNova", image: "./images/femalebots/female3.jpg" },
+      { name: "QuantumQuinn", image: "./images/femalebots/female4.jpg" }
+    ],
+    male: [
+      { name: "IronKnight", image: "/images/malebots/male1.jpg" },
+      { name: "TitaniumAce", image: "/images/malebots/male2.jpg" },
+      { name: "RoboRanger", image: "/images/malebots/male3.jpg" },
+      { name: "SteelGuardian", image: "/images/malebots/male4.jpg" }
+    ],
+    other: [
+      { name: "EchoPulse", image: "/images/otherbots/other1.jpg" },
+      { name: "SolarSurge", image: "/images/otherbots/other2.jpg" },
+      { name: "NeonSpectre", image: "/images/otherbots/other3.jpg" },
+      { name: "VoidWalker", image: "/images/otherbots/other4.jpg" }
+    ],
+    scary: [
+      { name: "OmegaDread", image: "/images/scary/scary1.jpg" },
+      { name: "VoidStalker", image: "/images/scary/scary2.jpg" },
+      { name: "MechaTerror", image: "/images/scary/scary3.jpg" },
+      { name: "CyberReaper", image: "/images/scary/scary4.jpg" }
+    ]
+  };
+}
+
+// Create and return a container for bot names
+function createBotNamesContainer() {
+  const container = document.createElement("div");
+  document.getElementById("settingsHide").appendChild(container);
+  return container;
+}
+
+// Function to display bot names as radio buttons & on image container + image
+function displayBotNames(bots, container) {
+  container.innerHTML = "";
+
+  let botNameElement = document.getElementById("botName");
+  let botImageElement = document.getElementById("botImage");
+
+  // Ensure the botImageElement is initially hidden
+  botImageElement.style.display = "none"; // This will ensure it starts hidden
+
+  bots.forEach((bot, index) => {
+    const label = document.createElement("label");
+    const botRadio = document.createElement("input");
+    botRadio.type = "radio";
+    botRadio.name = "botSelection";
+    botRadio.value = index;
+
+    label.appendChild(botRadio);
+    label.appendChild(document.createTextNode(bot.name));
+    container.appendChild(label);
+
+    botRadio.addEventListener("change", function () {
+      if (botRadio.checked) {
+        botNameElement.textContent = bot.name;
+        botImageElement.src = bot.image;
+        botImageElement.alt = bot.name;
+
+        // Show the image when a radio button is selected
+        botImageElement.style.display = "block";
+      }
+    });
+  });
+}
+
+// Function to initialize voice recognition
+function initializeVoiceRecognition() {
+  const voiceInputButton = document.getElementById("voiceInputButton");
+  voiceInputButton.addEventListener("click", function () {
+    if (
+      !("webkitSpeechRecognition" in window || "SpeechRecognition" in window)
+    ) {
+      alert(
+        "Your browser does not support speech recognition. Please use a supported browser like Chrome."
+      );
+      return;
+    }
+
+    const recognition = new (window.SpeechRecognition ||
       window.webkitSpeechRecognition)();
     recognition.lang = "en-US";
+    recognition.interimResults = false;
+    recognition.maxAlternatives = 1;
+
     recognition.start();
 
     recognition.onresult = function (event) {
-      document.getElementById("userInput").value =
+      document.getElementById("userMessage").value =
         event.results[0][0].transcript;
     };
 
+    recognition.onspeechend = function () {
+      recognition.stop();
+    };
+
     recognition.onerror = function (event) {
-      alert("Error occurred in recognition: " + event.error);
+      if (event.error === "no-speech") {
+        alert("No speech was detected. Please try again.");
+      } else {
+        alert("Error occurred in recognition: " + event.error);
+      }
     };
   });
+}
 
-// Array of image paths
-const images = [
-  "/images/backgrounds/background-blue3.jpg",
-  "/images/backgrounds/background-blue1.jpg",
-  "/images/backgrounds/background-blue2.jpg",
-  "/images/backgrounds/background-red.jpg",
-  "/images/backgrounds/background-white.jpg"
-];
+// Function to initialize background change functionality
+function initializeBackgroundChange() {
+  const images = [
+    "/images/backgrounds/background-blue1.jpg",
+    "/images/backgrounds/background-blue2.jpg",
+    "/images/backgrounds/background-blue3.jpg",
+    "/images/backgrounds/background-red1.jpg",
+    "/images/backgrounds/background-red2.jpg",
+    "/images/backgrounds/background-red3.jpg",
+    "/images/backgrounds/background-white1.jpg",
+    "/images/backgrounds/background-white2.jpg",
+    "/images/backgrounds/background-green1.jpg"
+  ];
 
-let currentIndex = 0; // Start at the first image
+  let currentIndex = 0;
+  const backgroundButton = document.getElementById("backgroundButton");
 
-let background = document.getElementById("background");
-background.addEventListener("click", changeBackground);
+  backgroundButton.addEventListener("click", function (event) {
+    event.preventDefault();
+    changeBackground(images, currentIndex);
+    currentIndex = (currentIndex + 1) % images.length;
+  });
+}
 
-function changeBackground(event) {
-  event.preventDefault(); // Keep this if the button is inside a form or an anchor tag
-
-  console.log("clicked");
-
-  // Get the current image
+// Function to change background image
+function changeBackground(images, currentIndex) {
   const selectedImage = images[currentIndex];
-
-  // Apply the current image as the background
   document.body.style.backgroundImage = `url('${selectedImage}')`;
   document.body.style.backgroundRepeat = "no-repeat";
   document.body.style.backgroundPosition = "center";
   document.body.style.backgroundSize = "cover";
-
-  // Move to the next image in the array
-  currentIndex++;
-
-  // If we've reached the end of the array, start over from the beginning
-  if (currentIndex >= images.length) {
-    currentIndex = 0;
-  }
 }
 
-// AIzaSyAjpuQ2GoKX1c3zPou9PglZp9Yn88KgxpU
+// Function to initialize settings toggle
+function initializeSettingsToggle() {
+  const toggleButton = document.getElementById("toggleSettingsButton");
+  const settingsDiv = document.getElementById("settingsHide");
+
+  toggleButton.addEventListener("click", function (event) {
+    event.preventDefault();
+    toggleSettingsVisibility(settingsDiv);
+  });
+
+  settingsDiv.classList.add("hidden");
+}
+
+// Function to toggle settings visibility
+function toggleSettingsVisibility(settingsDiv) {
+  if (settingsDiv.classList.contains("hidden")) {
+    settingsDiv.classList.remove("hidden");
+    settingsDiv.classList.add("visible");
+  } else {
+    settingsDiv.classList.remove("visible");
+    settingsDiv.classList.add("hidden");
+  }
+}

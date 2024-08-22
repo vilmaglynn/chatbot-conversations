@@ -18,74 +18,88 @@
 
 <body>
 	<div class="main-container">
-		<form id="botgender">
-			<h1>Choose your iBot</h1>
+		<form id="settings">
+			<h1>Chatbot conversations</h1>
+			<button id="toggleSettingsButton">Show/Hide - /Apply Settings</button>
 
-			<div class="radio-group">
-				<label>
-					<input type="radio" name="image" value="cartoon">
-					<span>Cartoon</span>
-				</label>
-				<label>
-					<input type="radio" name="image" value="female">
-					<span>Female</span>
-				</label>
-				<label>
-					<input type="radio" name="image" value="male">
-					<span>Male</span>
-				</label>
-				<label>
-					<input type="radio" name="image" value="other">
-					<span>Other</span>
-				</label>
-				<label>
-					<input type="radio" name="image" value="scary">
-					<span>Scary</span>
-				</label>
+			<div id="settingsHide">
+				<hr>
+				<ol>
+					<li>
+						<button id="backgroundButton">Choose background</button>
+					</li>
+					<li>
+						<h2>Choose your type</h2>
+						<div class="radio-group">
+							<label>
+								<input type="radio" name="image" value="cartoon">
+								<span>Cartoon</span>
+							</label>
+							<label>
+								<input type="radio" name="image" value="female">
+								<span>Female</span>
+							</label>
+							<label>
+								<input type="radio" name="image" value="male">
+								<span>Male</span>
+							</label>
+							<label>
+								<input type="radio" name="image" value="other">
+								<span>Other</span>
+							</label>
+							<label>
+								<input type="radio" name="image" value="scary">
+								<span>Scary</span>
+							</label>
+						</div>
+					</li>
+					<li>
+						<h2>Choose your iBot</h2>
+					</li>
+				</ol>
 			</div>
-
-			<button id="background">Change background</button>
 
 		</form>
 
 		<div class="botandchat">
 			<div class="iRobot">
 				<div id="imageContainer">
-					<h2>Name of bot</h2>
-					<img id="female" src="./images/femalebots/female1.jpg" alt="Image 1">
+					<h2 id="botName">Name of bot</h2>
+					<img id="botImage" src="" alt="Selected Bot Image">
+
+					<!-- <img id="female" src="./images/femalebots/female1.jpg" alt="Image 1">
 					<img id="male" src="./images/malebots/male1.jpg" alt="Image 2">
 					<img id="other" src="./images/otherbots/other1.jpg" alt="Image 3">
 					<img id="scary" src="./images/scary/scary1.jpg" alt="Image 3">
-					<img id="cartoon" src="./images/cartoon/cartoon1.jpg" alt="Image 3">
+					<img id="cartoon" src="./images/cartoon/cartoon1.jpg" alt="Image 3"> -->
 				</div>
 			</div>
 			<div class="chatbox">
-				<div id="inputContainer">
+				<div id="mainChatContainer">
 					<div class="labelChat">
-						<p>You</p>
+						<p>Chat</p>
+					</div>
+					<div id="mainChatMessage"></div>
+				</div>
+				<div id="messageContainer">
+					<div class="labelChat">
+						<p>Message your iBot</p>
 					</div>
 					<form action="/submit" method="post">
 						<textarea id="userMessage" name="message" rows="4" cols="50"
 							placeholder="Type your message here..." required></textarea>
 						<div>
 							<!-- Voice input button -->
-							<button id="voiceInputButton">
+							<button id="voiceInputButton" type="button">Record Msg
 								<i class="fa-solid fa-microphone"></i>
 							</button>
 							<!-- Send button with Font Awesome icon -->
 							<button id="textSubmit">
-								<i class="fa-solid fa-paper-plane"></i>
+								Send
 							</button>
 
 						</div>
-
 					</form>
-				</div>
-				<div id="botContainer">
-					<div class="labelChat">
-						<p>Bot</p>
-					</div>
-					<div id="botMessage"></div>
 				</div>
 			</div>
 		</div>
