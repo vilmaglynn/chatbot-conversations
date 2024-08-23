@@ -4,6 +4,8 @@ document.addEventListener("DOMContentLoaded", function () {
   initializeVoiceRecognition();
   initializeBackgroundChange();
   initializeSettingsToggle();
+  deleteMsgAction();
+  sendMsgAction();
 });
 
 // Function to initialize bot selection
@@ -194,4 +196,53 @@ function toggleSettingsVisibility(settingsDiv) {
     settingsDiv.classList.remove("visible");
     settingsDiv.classList.add("hidden");
   }
+}
+
+function deleteMsgAction() {
+  let deleteMsg = document.getElementById("deleteMsg");
+  let userMessage = document.getElementById("userMessage");
+
+  deleteMsg.addEventListener("click", function (event) {
+    event.preventDefault();
+    userMessage.value = ""; // Clear the content of the textarea
+  });
+}
+
+function sendMsgAction() {
+  let sendMessage = document.getElementById("sendMessage"); // Button element
+  let mainChatMessage = document.getElementById("mainChatMessage"); // Chat area where messages will be displayed
+  let userMessage = document.getElementById("userMessage"); // Textarea or input element where the user types their message
+
+  sendMessage.addEventListener("click", function (event) {
+    event.preventDefault(); // Prevent the default form submission behavior
+
+    // Get the user's message from the input/textarea
+    let message = userMessage.value;
+
+    if (message.trim() !== "") {
+      // Check if the message is not just whitespace
+      // Create a new div or paragraph element to hold the message
+      let newMessage = document.createElement("p");
+
+      // Create a span for the "You:" label
+      let userLabel = document.createElement("span");
+      userLabel.className = "user-label"; // Add a class for styling
+      userLabel.textContent = "You: ";
+
+      // Create a span for the message content
+      let messageContent = document.createElement("span");
+      messageContent.className = "user-message"; // Add a class for styling
+      messageContent.textContent = message;
+
+      // Append the spans to the new message
+      newMessage.appendChild(userLabel);
+      newMessage.appendChild(messageContent);
+
+      // Append the new message to the main chat area
+      mainChatMessage.appendChild(newMessage);
+
+      // Clear the input/textarea after sending the message
+      userMessage.value = "";
+    }
+  });
 }

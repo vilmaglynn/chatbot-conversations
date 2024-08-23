@@ -1,7 +1,5 @@
 /* Background Styling */
 body {
-  /* background-image: linear-gradient(rgba(0, 0, 0, 0.222), rgba(0, 0, 0, 0.5)),
-    url(./images/backgrounds/background-blue1.jpg); */
   background-color: #000000df;
   background-repeat: no-repeat;
   background-position: center;
@@ -24,14 +22,14 @@ body {
   box-shadow: 0 0 20px rgba(0, 255, 255, 0.5);
 }
 
-/* Selecting the bot type*/
 #settings h1 {
   margin-bottom: 5px;
   font-family: "Orbitron", sans-serif;
-  font-size: 1.8em;
+  font-size: 2em;
   color: #0ff;
   text-shadow: 0 0 10px rgba(0, 255, 255, 0.7);
 }
+
 #settings h2 {
   margin-bottom: 5px;
   font-family: "Orbitron", sans-serif;
@@ -39,10 +37,10 @@ body {
   color: #0ff;
   text-shadow: 0 0 10px rgba(0, 255, 255, 0.7);
 }
+
 #toggleSettingsButton {
   margin-bottom: 10px;
   padding: 8px;
-  /* background-color: #0ff; */
   color: white;
   border: none;
   border-radius: 8px;
@@ -55,9 +53,9 @@ body {
 }
 
 #toggleSettingsButton:hover {
-  /* background-color: #00cccc; */
   transform: scale(1.05);
 }
+
 /* Transition effects for smooth show/hide */
 #settingsHide {
   max-height: 0;
@@ -164,12 +162,12 @@ body {
   bottom: 0px;
   left: 50%;
   transform: translateX(-50%);
-  color: white;
+  color: rgb(255, 247, 0);
   background-color: rgba(0, 0, 0, 0.7);
   padding: 20px;
   border-radius: 5px;
   font-family: "Orbitron", sans-serif;
-  font-size: 1.2em;
+  font-size: 2em;
   text-align: center;
   width: 100%;
 }
@@ -182,7 +180,6 @@ body {
   background-color: rgba(24, 24, 24, 0.742);
   box-shadow: 0 0 15px rgba(0, 255, 255, 0.3);
   box-sizing: border-box;
-
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -208,6 +205,7 @@ body {
 }
 
 #userMessage {
+  flex-grow: 1; /* Take up remaining space */
   padding: 10px;
   background-color: rgba(0, 0, 0, 0.7);
   border: 1px solid #0ff;
@@ -219,10 +217,50 @@ body {
   height: 50px;
 }
 
-/* Button Styling */
-#textSubmit,
-#voiceInputButton {
+#mainChatMessage {
+  height: 250px;
+  overflow-y: scroll; /* Always show vertical scroll */
+  overflow-x: hidden; /* Prevent horizontal scroll */
+  padding: 10px;
+  background-color: rgba(0, 0, 0, 0.7);
+  border: 1px solid #0ff;
+  border-radius: 5px;
+  color: white;
+  font-family: "Rowdies", sans-serif;
+  font-size: 1em;
+  box-sizing: border-box; /* Ensure padding and borders are included in the width/height */
+}
+
+#messageAndDelete {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px; /* Space between the textarea + delete and the buttons below */
+}
+
+#deleteMsg {
   margin-left: 10px;
+  padding: 10px;
+  background-color: #ff4c4c; /* Red color for delete */
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(255, 76, 76, 0.6);
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+#deleteMsg:hover {
+  background-color: #e60000;
+}
+
+#actions {
+  display: flex;
+  justify-content: left;
+  column-gap: 5px;
+}
+
+#voiceInputButton,
+#sendMessage {
   padding: 10px 20px;
   background-color: #0ff;
   color: #000;
@@ -233,8 +271,8 @@ body {
   transition: background-color 0.3s ease;
 }
 
-#textSubmit,
-#voiceInputButton:hover {
+#voiceInputButton:hover,
+#sendMessage:hover {
   background-color: #00cccc;
 }
 
@@ -259,15 +297,26 @@ body {
   border-radius: 5px;
   box-shadow: 0 0 10px rgba(0, 255, 255, 0.3);
   padding: 10px;
-  height: 100px;
+  overflow-y: auto;
 }
 
-#mainChatMessage {
-  max-height: 150px;
-  height: 150px;
-  padding: 10px;
-  background-color: rgba(0, 0, 0, 0.7);
-  border: 1px solid #0ff;
-  border-radius: 5px;
+.botMessage {
   color: white;
+  font-family: "Rowdies", sans-serif;
+  font-size: 1em;
+  background-color: rgba(0, 0, 0, 0.7);
+  padding: 10px;
+  border-radius: 5px;
+  margin-bottom: 10px;
+  box-shadow: 0 0 8px rgba(0, 255, 255, 0.5);
+}
+
+.botMessage p {
+  margin: 0;
+  word-wrap: break-word;
+}
+
+.user-label {
+  color: rgb(255, 247, 0); /* Color for "You:" label */
+  font-weight: bold; /* Optional: Make the label bold */
 }

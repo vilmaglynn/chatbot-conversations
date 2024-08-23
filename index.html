@@ -85,22 +85,26 @@
 					<div class="labelChat">
 						<p>Message your iBot</p>
 					</div>
-					<form action="/submit" method="post">
-						<textarea id="userMessage" name="message" rows="4" cols="50"
-							placeholder="Type your message here..." required></textarea>
-						<div>
+					<form id="messageForm">
+						<div id="messageAndDelete">
+							<textarea id="userMessage" name="message" rows="4" cols="50"
+								placeholder="Type your message here..." required></textarea>
+							<button id="deleteMsg" type="button"><i class="fa-solid fa-square-xmark"></i></button>
+						</div>
+						<div id="actions">
 							<!-- Voice input button -->
 							<button id="voiceInputButton" type="button">Record Msg
 								<i class="fa-solid fa-microphone"></i>
 							</button>
 							<!-- Send button with Font Awesome icon -->
-							<button id="textSubmit">
-								Send
+							<button id="sendMessage" type="button">
+								Send <i class="fa-solid fa-paper-plane"></i>
 							</button>
-
 						</div>
 					</form>
+
 				</div>
+
 			</div>
 		</div>
 	</div>
