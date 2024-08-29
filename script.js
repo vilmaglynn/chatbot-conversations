@@ -1,7 +1,5 @@
 // Define your API URL and key here
 const apiUrl = "https://api.openai.com/v1/chat/completions"; // Replace with your actual API URL
-// const apiKey =
-//   "sk-y2ve9Nru2IXgXx2HwJzXD1wmqziqFmNvX1UFDp46fET3BlbkFJ949YRgiPw5F4qDVrku1q85fF4c2M_ROL0Rgx1v8oAA"; // Replace with your actual API key
 
 document.addEventListener("DOMContentLoaded", function () {
   // Initialize all functions on DOMContentLoaded
