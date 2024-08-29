@@ -16,8 +16,8 @@ body {
   padding: 30px;
   border-radius: 15px;
   margin: 10px auto;
-  width: 500px;
-  max-width: 500px;
+  width: 520px;
+  max-width: 600px;
   text-align: left;
   box-shadow: 0 0 20px rgba(0, 255, 255, 0.5);
 }
@@ -319,4 +319,54 @@ body {
 .user-label {
   color: rgb(255, 247, 0); /* Color for "You:" label */
   font-weight: bold; /* Optional: Make the label bold */
+}
+
+/* All button styling */
+/* Idle state */
+#voiceInputButton {
+  background-color: #0ff;
+}
+
+/* Recording state */
+#voiceInputButton.recording {
+  background-color: rgb(255, 247, 0);
+  animation: pulse 1s infinite;
+}
+
+/* Success state */
+#voiceInputButton.success {
+  background-color: green;
+  color: white;
+}
+
+/* Failure state */
+#voiceInputButton.failure {
+  background-color: red;
+  color: white;
+  animation: shake 0.5s;
+}
+
+@keyframes pulse {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes shake {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(-5px);
+  }
+  75% {
+    transform: translateX(5px);
+  }
 }

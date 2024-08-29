@@ -1,3 +1,8 @@
+// Define your API URL and key here
+const apiUrl = "https://api.openai.com/v1/chat/completions"; // Replace with your actual API URL
+const apiKey =
+  "sk-y2ve9Nru2IXgXx2HwJzXD1wmqziqFmNvX1UFDp46fET3BlbkFJ949YRgiPw5F4qDVrku1q85fF4c2M_ROL0Rgx1v8oAA"; // Replace with your actual API key
+
 document.addEventListener("DOMContentLoaded", function () {
   // Initialize all functions on DOMContentLoaded
   initializeBotSelection();
@@ -35,26 +40,26 @@ function getBotCategories() {
     ],
     female: [
       { name: "CyberLuna", image: "./images/femalebots/female1.jpg" },
-      { name: "VegaVixen", image: "./images/femalebots/female2.jpg" },
+      { name: "SeraphinaByte", image: "./images/femalebots/female2.jpg" },
       { name: "NebulaNova", image: "./images/femalebots/female3.jpg" },
-      { name: "QuantumQuinn", image: "./images/femalebots/female4.jpg" }
+      { name: "KatarinaQuantum", image: "./images/femalebots/female4.jpg" }
     ],
     male: [
-      { name: "IronKnight", image: "/images/malebots/male1.jpg" },
-      { name: "TitaniumAce", image: "/images/malebots/male2.jpg" },
-      { name: "RoboRanger", image: "/images/malebots/male3.jpg" },
-      { name: "SteelGuardian", image: "/images/malebots/male4.jpg" }
+      { name: "IronKnightB12", image: "/images/malebots/male1.jpg" },
+      { name: "TitaniumAce67", image: "/images/malebots/male2.jpg" },
+      { name: "RoboRanger170", image: "/images/malebots/male3.jpg" },
+      { name: "SteelGuardianE23", image: "/images/malebots/male4.jpg" }
     ],
     other: [
-      { name: "EchoPulse", image: "/images/otherbots/other1.jpg" },
-      { name: "SolarSurge", image: "/images/otherbots/other2.jpg" },
-      { name: "NeonSpectre", image: "/images/otherbots/other3.jpg" },
-      { name: "VoidWalker", image: "/images/otherbots/other4.jpg" }
+      { name: "EchoPython", image: "/images/otherbots/other1.jpg" },
+      { name: "PascalSurge", image: "/images/otherbots/other2.jpg" },
+      { name: "OracleSpectre", image: "/images/otherbots/other3.jpg" },
+      { name: "CobolWalker", image: "/images/otherbots/other4.jpg" }
     ],
     scary: [
       { name: "OmegaDread", image: "/images/scary/scary1.jpg" },
-      { name: "VoidStalker", image: "/images/scary/scary2.jpg" },
-      { name: "MechaTerror", image: "/images/scary/scary3.jpg" },
+      { name: "HidargoT9675", image: "/images/scary/scary2.jpg" },
+      { name: "CazTerTerror", image: "/images/scary/scary3.jpg" },
       { name: "CyberReaper", image: "/images/scary/scary4.jpg" }
     ]
   };
@@ -101,22 +106,36 @@ function displayBotNames(bots, container) {
   });
 }
 
-// Function to initialize voice recognition
 function initializeVoiceRecognition() {
   const voiceInputButton = document.getElementById("voiceInputButton");
+  const recordSound = document.getElementById("recordSound");
+
   voiceInputButton.addEventListener("click", function () {
+    // Reset button state and text
+    resetButton();
+    voiceInputButton.classList.add("recording");
+    voiceInputButton.textContent = "Recording...";
+
+    // Play the sound when the button is clicked
+    recordSound.currentTime = 0; // Rewind to start in case it was already played
+    recordSound.play().catch((error) => {
+      console.error("Error playing sound:", error);
+      handleFailure("Failed to play recording sound.");
+    });
+
     if (
       !("webkitSpeechRecognition" in window || "SpeechRecognition" in window)
     ) {
       alert(
         "Your browser does not support speech recognition. Please use a supported browser like Chrome."
       );
+      resetButton();
       return;
     }
 
     const recognition = new (window.SpeechRecognition ||
       window.webkitSpeechRecognition)();
-    recognition.lang = "en-US";
+    recognition.lang = "en-GB";
     recognition.interimResults = false;
     recognition.maxAlternatives = 1;
 
@@ -125,10 +144,14 @@ function initializeVoiceRecognition() {
     recognition.onresult = function (event) {
       document.getElementById("userMessage").value =
         event.results[0][0].transcript;
+      handleSuccess("Recording Saved");
     };
 
     recognition.onspeechend = function () {
       recognition.stop();
+      if (!voiceInputButton.classList.contains("success")) {
+        resetButton();
+      }
     };
 
     recognition.onerror = function (event) {
@@ -137,8 +160,28 @@ function initializeVoiceRecognition() {
       } else {
         alert("Error occurred in recognition: " + event.error);
       }
+      handleFailure("Recording Failed");
     };
   });
+
+  function resetButton() {
+    voiceInputButton.classList.remove("recording", "success", "failure");
+    voiceInputButton.textContent = "Record Message";
+  }
+
+  function handleSuccess(message) {
+    voiceInputButton.classList.remove("recording");
+    voiceInputButton.classList.add("success");
+    voiceInputButton.textContent = message;
+    setTimeout(resetButton, 2000); // Reset after 2 seconds
+  }
+
+  function handleFailure(message) {
+    voiceInputButton.classList.remove("recording");
+    voiceInputButton.classList.add("failure");
+    voiceInputButton.textContent = message;
+    setTimeout(resetButton, 2000); // Reset after 2 seconds
+  }
 }
 
 // Function to initialize background change functionality
@@ -209,40 +252,61 @@ function deleteMsgAction() {
 }
 
 function sendMsgAction() {
-  let sendMessage = document.getElementById("sendMessage"); // Button element
-  let mainChatMessage = document.getElementById("mainChatMessage"); // Chat area where messages will be displayed
-  let userMessage = document.getElementById("userMessage"); // Textarea or input element where the user types their message
+  let sendMessage = document.getElementById("sendMessage");
+  let mainChatMessage = document.getElementById("mainChatMessage");
+  let userMessage = document.getElementById("userMessage");
 
-  sendMessage.addEventListener("click", function (event) {
-    event.preventDefault(); // Prevent the default form submission behavior
+  sendMessage.addEventListener("click", async function (event) {
+    event.preventDefault();
 
-    // Get the user's message from the input/textarea
     let message = userMessage.value;
 
     if (message.trim() !== "") {
-      // Check if the message is not just whitespace
-      // Create a new div or paragraph element to hold the message
-      let newMessage = document.createElement("p");
-
-      // Create a span for the "You:" label
-      let userLabel = document.createElement("span");
-      userLabel.className = "user-label"; // Add a class for styling
-      userLabel.textContent = "You: ";
-
-      // Create a span for the message content
-      let messageContent = document.createElement("span");
-      messageContent.className = "user-message"; // Add a class for styling
-      messageContent.textContent = message;
-
-      // Append the spans to the new message
-      newMessage.appendChild(userLabel);
-      newMessage.appendChild(messageContent);
-
-      // Append the new message to the main chat area
-      mainChatMessage.appendChild(newMessage);
+      // Display user's message
+      displayUserMessage(message, mainChatMessage);
 
       // Clear the input/textarea after sending the message
       userMessage.value = "";
+
+      // Get bot's response
+      let botResponse = await getBotResponse(message);
+
+      // Display bot's response
+      displayBotMessage(botResponse, mainChatMessage);
     }
   });
+}
+
+// Function to display the user's message
+function displayUserMessage(message, chatContainer) {
+  let newMessage = document.createElement("p");
+
+  let userLabel = document.createElement("span");
+  userLabel.className = "user-label";
+  userLabel.textContent = "You: ";
+
+  let messageContent = document.createElement("span");
+  messageContent.className = "user-message";
+  messageContent.textContent = message;
+
+  newMessage.appendChild(userLabel);
+  newMessage.appendChild(messageContent);
+  chatContainer.appendChild(newMessage);
+}
+
+// Function to display the bot's message
+function displayBotMessage(message, chatContainer) {
+  let newMessage = document.createElement("p");
+
+  let botLabel = document.createElement("span");
+  botLabel.className = "bot-label";
+  botLabel.textContent = "Bot: ";
+
+  let messageContent = document.createElement("span");
+  messageContent.className = "bot-message";
+  messageContent.textContent = message;
+
+  newMessage.appendChild(botLabel);
+  newMessage.appendChild(messageContent);
+  chatContainer.appendChild(newMessage);
 }
