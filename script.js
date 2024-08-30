@@ -195,15 +195,15 @@ function initializeVoiceRecognition() {
 // Function to initialize background change functionality
 function initializeBackgroundChange() {
   const images = [
-    "/images/backgrounds/background-blue1.jpg",
-    "/images/backgrounds/background-blue2.jpg",
-    "/images/backgrounds/background-blue3.jpg",
-    "/images/backgrounds/background-red1.jpg",
-    "/images/backgrounds/background-red2.jpg",
-    "/images/backgrounds/background-red3.jpg",
-    "/images/backgrounds/background-white1.jpg",
-    "/images/backgrounds/background-white2.jpg",
-    "/images/backgrounds/background-green1.jpg"
+    "./images/backgrounds/background-blue1.jpg",
+    "./images/backgrounds/background-blue2.jpg",
+    "./images/backgrounds/background-blue3.jpg",
+    "./images/backgrounds/background-red1.jpg",
+    "./images/backgrounds/background-red2.jpg",
+    "./images/backgrounds/background-red3.jpg",
+    "./images/backgrounds/background-white1.jpg",
+    "./images/backgrounds/background-white2.jpg",
+    "./images/backgrounds/background-green1.jpg"
   ];
 
   let currentIndex = 0;
