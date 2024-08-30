@@ -1,3 +1,6 @@
+const apiKey = process.env.API_KEY;
+console.log("Your API Key is:", apiKey);
+
 // Define your API URL and key here
 const apiUrl = "https://api.openai.com/v1/chat/completions"; // Replace with your actual API URL
 
@@ -109,17 +112,20 @@ function initializeVoiceRecognition() {
   const recordSound = document.getElementById("recordSound");
 
   voiceInputButton.addEventListener("click", function () {
-    // Reset button state and text
-    resetButton();
-    voiceInputButton.classList.add("recording");
-    voiceInputButton.textContent = "Recording...";
-
     // Play the sound when the button is clicked
     recordSound.currentTime = 0; // Rewind to start in case it was already played
-    recordSound.play().catch((error) => {
-      console.error("Error playing sound:", error);
-      handleFailure("Failed to play recording sound.");
-    });
+    recordSound
+      .play()
+      .then(() => {
+        // Update button content and class after the sound starts playing
+        voiceInputButton.classList.add("recording");
+        voiceInputButton.innerHTML =
+          'Recording... <i class="fa-solid fa-microphone"></i>';
+      })
+      .catch((error) => {
+        console.error("Error playing sound:", error);
+        handleFailure("Failed to play recording sound.");
+      });
 
     if (
       !("webkitSpeechRecognition" in window || "SpeechRecognition" in window)
@@ -155,16 +161,20 @@ function initializeVoiceRecognition() {
     recognition.onerror = function (event) {
       if (event.error === "no-speech") {
         alert("No speech was detected. Please try again.");
+        handleFailure("No speech detected");
+        resetButton();
       } else {
         alert("Error occurred in recognition: " + event.error);
+        handleFailure("Recording Failed");
+        resetButton();
       }
-      handleFailure("Recording Failed");
     };
   });
 
   function resetButton() {
     voiceInputButton.classList.remove("recording", "success", "failure");
-    voiceInputButton.textContent = "Record Message";
+    voiceInputButton.innerHTML =
+      'Record Msg <i class="fa-solid fa-microphone"></i>';
   }
 
   function handleSuccess(message) {
@@ -257,6 +267,7 @@ function sendMsgAction() {
   sendMessage.addEventListener("click", async function (event) {
     event.preventDefault();
 
+    sendSound.play();
     let message = userMessage.value;
 
     if (message.trim() !== "") {
