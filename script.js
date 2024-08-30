@@ -1,5 +1,5 @@
-const apiKey = process.env.API_KEY;
-console.log("Your API Key is:", apiKey);
+const apiUrl2 =
+  "https://chatbotconversations.netlify.app/.netlify/functions/chat";
 
 // Define your API URL and key here
 const apiUrl = "https://api.openai.com/v1/chat/completions"; // Replace with your actual API URL
