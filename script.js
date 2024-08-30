@@ -46,22 +46,22 @@ function getBotCategories() {
       { name: "KatarinaQuantum", image: "./images/femalebots/female4.jpg" }
     ],
     male: [
-      { name: "IronKnightB12", image: "/images/malebots/male1.jpg" },
-      { name: "TitaniumAce67", image: "/images/malebots/male2.jpg" },
-      { name: "RoboRanger170", image: "/images/malebots/male3.jpg" },
-      { name: "SteelGuardianE23", image: "/images/malebots/male4.jpg" }
+      { name: "IronKnightB12", image: "./images/malebots/male1.jpg" },
+      { name: "TitaniumAce67", image: "./images/malebots/male2.jpg" },
+      { name: "RoboRanger170", image: "./images/malebots/male3.jpg" },
+      { name: "SteelGuardianE23", image: "./images/malebots/male4.jpg" }
     ],
     other: [
-      { name: "EchoPython", image: "/images/otherbots/other1.jpg" },
-      { name: "PascalSurge", image: "/images/otherbots/other2.jpg" },
-      { name: "OracleSpectre", image: "/images/otherbots/other3.jpg" },
-      { name: "CobolWalker", image: "/images/otherbots/other4.jpg" }
+      { name: "EchoPython", image: "./images/otherbots/other1.jpg" },
+      { name: "PascalSurge", image: "./images/otherbots/other2.jpg" },
+      { name: "OracleSpectre", image: "./images/otherbots/other3.jpg" },
+      { name: "CobolWalker", image: "./images/otherbots/other4.jpg" }
     ],
     scary: [
-      { name: "OmegaDread", image: "/images/scary/scary1.jpg" },
-      { name: "HidargoT9675", image: "/images/scary/scary2.jpg" },
-      { name: "CazTerTerror", image: "/images/scary/scary3.jpg" },
-      { name: "CyberReaper", image: "/images/scary/scary4.jpg" }
+      { name: "OmegaDread", image: "./images/scary/scary1.jpg" },
+      { name: "HidargoT9675", image: "./images/scary/scary2.jpg" },
+      { name: "CazTerTerror", image: "./images/scary/scary3.jpg" },
+      { name: "CyberReaper", image: "./images/scary/scary4.jpg" }
     ]
   };
 }
