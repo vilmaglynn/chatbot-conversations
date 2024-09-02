@@ -2,7 +2,24 @@ const apiUrl =
   "https://cheapest-gpt-4-turbo-gpt-4-vision-chatgpt-openai-ai-api.p.rapidapi.com/v1/chat/completions";
 const API_KEY = "1dc16be9ccmsh6df3721a5f10d2ap1f1670jsn2d50fb26ca53"; // Replace with your API key
 
+// Function to get a bot's personality based on selected bot type and name
+function getBotPersonality(selectedBotType, selectedBotName) {
+  const botCategories = getBotCategories();
+  const botCategory = botCategories[selectedBotType];
+  if (botCategory) {
+    const selectedBot = botCategory.find((bot) => bot.name === selectedBotName);
+    return selectedBot ? selectedBot.personality : "";
+  }
+  return "";
+}
+
+// Function to get the bot's message using the selected bot's personality
 async function getBotMessage(userMessage) {
+  if (!selectedBot.name || !selectedBot.type) {
+    return "No bot selected. Please select a bot before sending a message.";
+  }
+
+  const botPersonality = getBotPersonality(selectedBot.type, selectedBot.name);
   const options = {
     method: "POST",
     headers: {
@@ -14,8 +31,12 @@ async function getBotMessage(userMessage) {
     body: JSON.stringify({
       messages: [
         {
+          role: "system",
+          content: `You are a chatbot named ${selectedBot.name}. You have ${botPersonality}`
+        },
+        {
           role: "user",
-          content: userMessage // Use the actual user message
+          content: userMessage
         }
       ],
       model: "gpt-4o",
@@ -26,8 +47,12 @@ async function getBotMessage(userMessage) {
 
   try {
     const response = await fetch(apiUrl, options);
-    const result = await response.json(); // Parse JSON instead of text
-    return result.choices[0].message.content; // Return the bot's response
+    if (!response.ok) {
+      console.error("Response error:", await response.text());
+      return `Error: ${response.status} ${response.statusText}`;
+    }
+    const result = await response.json();
+    return result.choices[0].message.content;
   } catch (error) {
     console.error("Failed to get bot message:", error);
     return "Sorry, something went wrong. Please try again.";
@@ -53,44 +78,135 @@ function initializeBotSelection() {
     radio.addEventListener("change", function () {
       const selectedCategory = botCategories[radio.value];
       if (selectedCategory) {
-        displayBotNames(selectedCategory, botNamesContainer);
+        displayBotNames(selectedCategory, botNamesContainer, radio.value); // Pass the type
       }
     });
   });
 }
 
-// Returns an object containing bot categories
+// Returns an object containing bot categories with names, images, and personalities
 function getBotCategories() {
   return {
     cartoon: [
-      { name: "RoboSparkle", image: "./images/cartoon/cartoon1.jpg" },
-      { name: "GigaGizmo", image: "./images/cartoon/cartoon2.jpg" },
-      { name: "CircuitBuddy", image: "./images/cartoon/cartoon3.jpg" },
-      { name: "PixelBot", image: "./images/cartoon/cartoon4.jpg" }
+      {
+        name: "RoboSparkle",
+        image: "./images/cartoon/cartoon1.jpg",
+        personality:
+          "a super cheerful and playful tone, always positive and enthusiastic like a cartoon character. He says sparkle in all of his sentences"
+      },
+      {
+        name: "GigaGizmo",
+        image: "./images/cartoon/cartoon2.jpg",
+        personality:
+          "a curious and inquisitive personality, asking lots of questions like a child."
+      },
+      {
+        name: "CircuitBuddy",
+        image: "./images/cartoon/cartoon3.jpg",
+        personality:
+          "a caring , friendly and helpful personality, like a kindergarden teacher."
+      },
+      {
+        name: "PixelBot",
+        image: "./images/cartoon/cartoon4.jpg",
+        personality:
+          "a nerdy but charming personality, loves technology and able to explain to a 5 year old child."
+      }
     ],
     female: [
-      { name: "CyberLuna", image: "./images/femalebots/female1.jpg" },
-      { name: "SeraphinaByte", image: "./images/femalebots/female2.jpg" },
-      { name: "NebulaNova", image: "./images/femalebots/female3.jpg" },
-      { name: "KatarinaQuantum", image: "./images/femalebots/female4.jpg" }
+      {
+        name: "CyberLuna",
+        image: "./images/femalebots/female1.jpg",
+        personality: "a mysterious and wise tone, offering deep insights."
+      },
+      {
+        name: "SeraphinaByte",
+        image: "./images/femalebots/female2.jpg",
+        personality: "a gentle and caring personality, always supportive."
+      },
+      {
+        name: "NebulaNova",
+        image: "./images/femalebots/female3.jpg",
+        personality: "an adventurous and bold personality, loves challenges."
+      },
+      {
+        name: "KatarinaQuantum",
+        image: "./images/femalebots/female4.jpg",
+        personality: "a logical and precise personality, very analytical."
+      }
     ],
     male: [
-      { name: "IronKnightB12", image: "./images/malebots/male1.jpg" },
-      { name: "TitaniumAce67", image: "./images/malebots/male2.jpg" },
-      { name: "RoboRanger170", image: "./images/malebots/male3.jpg" },
-      { name: "SteelGuardianE23", image: "./images/malebots/male4.jpg" }
+      {
+        name: "IronKnightB12",
+        image: "./images/malebots/male1.jpg",
+        personality: "a strong and honorable personality, like a noble knight."
+      },
+      {
+        name: "TitaniumAce67",
+        image: "./images/malebots/male2.jpg",
+        personality:
+          "a competitive and daring personality, always up for a challenge."
+      },
+      {
+        name: "RoboRanger170",
+        image: "./images/malebots/male3.jpg",
+        personality:
+          "a brave and loyal personality, ready to protect and serve."
+      },
+      {
+        name: "SteelGuardianE23",
+        image: "./images/malebots/male4.jpg",
+        personality:
+          "a stoic and reliable personality, like a steadfast guardian."
+      }
     ],
     other: [
-      { name: "EchoPython", image: "./images/otherbots/other1.jpg" },
-      { name: "PascalSurge", image: "./images/otherbots/other2.jpg" },
-      { name: "OracleSpectre", image: "./images/otherbots/other3.jpg" },
-      { name: "CobolWalker", image: "./images/otherbots/other4.jpg" }
+      {
+        name: "EchoPython",
+        image: "./images/otherbots/other1.jpg",
+        personality: "a mysterious and enigmatic personality, full of secrets."
+      },
+      {
+        name: "PascalSurge",
+        image: "./images/otherbots/other2.jpg",
+        personality:
+          "an energetic and fast-paced personality, always on the go."
+      },
+      {
+        name: "OracleSpectre",
+        image: "./images/otherbots/other3.jpg",
+        personality:
+          "a wise and cryptic personality, offering riddles and crazyprophecies."
+      },
+      {
+        name: "CobolWalker",
+        image: "./images/otherbots/other4.jpg",
+        personality:
+          "a logical and methodical personality, calculating every move."
+      }
     ],
     scary: [
-      { name: "OmegaDread", image: "./images/scary/scary1.jpg" },
-      { name: "HidargoT9675", image: "./images/scary/scary2.jpg" },
-      { name: "CazTerTerror", image: "./images/scary/scary3.jpg" },
-      { name: "CyberReaper", image: "./images/scary/scary4.jpg" }
+      {
+        name: "OmegaDread",
+        image: "./images/scary/scary1.jpg",
+        personality: "a terrifying and intimidating personality, inducing fear."
+      },
+      {
+        name: "HidargoT9675",
+        image: "./images/scary/scary2.jpg",
+        personality: "a cold and ruthless personality, without mercy."
+      },
+      {
+        name: "CazTerTerror",
+        image: "./images/scary/scary3.jpg",
+        personality: "a chaotic and unpredictable personality, causing terror."
+      },
+      {
+        name: "CyberReaper",
+        image: "./images/scary/scary4.jpg",
+        personality:
+          "a grim and ominous personality, like the harbinger of doom."
+      }
     ]
   };
 }
@@ -100,40 +216,6 @@ function createBotNamesContainer() {
   const container = document.createElement("div");
   document.getElementById("settingsHide").appendChild(container);
   return container;
-}
-
-// Function to display bot names as radio buttons & on image container + image
-function displayBotNames(bots, container) {
-  container.innerHTML = "";
-
-  let botNameElement = document.getElementById("botName");
-  let botImageElement = document.getElementById("botImage");
-
-  // Ensure the botImageElement is initially hidden
-  botImageElement.style.display = "none"; // This will ensure it starts hidden
-
-  bots.forEach((bot, index) => {
-    const label = document.createElement("label");
-    const botRadio = document.createElement("input");
-    botRadio.type = "radio";
-    botRadio.name = "botSelection";
-    botRadio.value = index;
-
-    label.appendChild(botRadio);
-    label.appendChild(document.createTextNode(bot.name));
-    container.appendChild(label);
-
-    botRadio.addEventListener("change", function () {
-      if (botRadio.checked) {
-        botNameElement.textContent = bot.name;
-        botImageElement.src = bot.image;
-        botImageElement.alt = bot.name;
-
-        // Show the image when a radio button is selected
-        botImageElement.style.display = "block";
-      }
-    });
-  });
 }
 
 // Function to initialize background change functionality
@@ -321,6 +403,43 @@ function displayBotMessage(message, chatContainer) {
   chatContainer.appendChild(newMessage);
 }
 
+let selectedBot = { name: "", type: "" };
+
+function displayBotNames(bots, container, type) {
+  container.innerHTML = "";
+
+  let botNameElement = document.getElementById("botName");
+  let botImageElement = document.getElementById("botImage");
+
+  botImageElement.style.display = "none";
+
+  bots.forEach((bot, index) => {
+    const label = document.createElement("label");
+    const botRadio = document.createElement("input");
+    botRadio.type = "radio";
+    botRadio.name = "botSelection";
+    botRadio.value = index;
+
+    label.appendChild(botRadio);
+    label.appendChild(document.createTextNode(bot.name));
+    container.appendChild(label);
+
+    botRadio.addEventListener("change", function () {
+      if (botRadio.checked) {
+        botNameElement.textContent = bot.name;
+        botImageElement.src = bot.image;
+        botImageElement.alt = bot.name;
+        botImageElement.style.display = "block";
+
+        // Track the selected bot's name and type
+        selectedBot.name = bot.name;
+        selectedBot.type = type; // Correctly assign the bot type
+      }
+    });
+  });
+}
+
+// Continue with your existing sendMsgAction function
 async function sendMsgAction() {
   let sendMessage = document.getElementById("sendMessage");
   let mainChatMessage = document.getElementById("mainChatMessage");
@@ -333,17 +452,11 @@ async function sendMsgAction() {
     let message = userMessage.value;
 
     if (message.trim() !== "") {
-      // Display user's message
       displayUserMessage(message, mainChatMessage);
-
-      // Clear the input/textarea after sending the message
       userMessage.value = "";
 
-      // Get bot's response
       try {
         let botResponse = await getBotMessage(message);
-
-        // Display bot's response
         displayBotMessage(botResponse, mainChatMessage);
       } catch (error) {
         console.error("Failed to get bot message:", error);
