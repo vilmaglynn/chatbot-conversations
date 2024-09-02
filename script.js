@@ -1,11 +1,40 @@
-const apiUrl2 =
-  "https://chatbotconversations.netlify.app/.netlify/functions/chat";
+const apiUrl =
+  "https://cheapest-gpt-4-turbo-gpt-4-vision-chatgpt-openai-ai-api.p.rapidapi.com/v1/chat/completions";
+const API_KEY = "1dc16be9ccmsh6df3721a5f10d2ap1f1670jsn2d50fb26ca53"; // Replace with your API key
 
-// Define your API URL and key here
-const apiUrl = "https://api.openai.com/v1/chat/completions"; // Replace with your actual API URL
+async function getBotMessage(userMessage) {
+  const options = {
+    method: "POST",
+    headers: {
+      "x-rapidapi-key": API_KEY,
+      "x-rapidapi-host":
+        "cheapest-gpt-4-turbo-gpt-4-vision-chatgpt-openai-ai-api.p.rapidapi.com",
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      messages: [
+        {
+          role: "user",
+          content: userMessage // Use the actual user message
+        }
+      ],
+      model: "gpt-4o",
+      max_tokens: 100,
+      temperature: 0.9
+    })
+  };
+
+  try {
+    const response = await fetch(apiUrl, options);
+    const result = await response.json(); // Parse JSON instead of text
+    return result.choices[0].message.content; // Return the bot's response
+  } catch (error) {
+    console.error("Failed to get bot message:", error);
+    return "Sorry, something went wrong. Please try again.";
+  }
+}
 
 document.addEventListener("DOMContentLoaded", function () {
-  // Initialize all functions on DOMContentLoaded
   initializeBotSelection();
   initializeVoiceRecognition();
   initializeBackgroundChange();
@@ -107,6 +136,73 @@ function displayBotNames(bots, container) {
   });
 }
 
+// Function to initialize background change functionality
+function initializeBackgroundChange() {
+  const images = [
+    "./images/backgrounds/background-blue1.jpg",
+    "./images/backgrounds/background-blue2.jpg",
+    "./images/backgrounds/background-blue3.jpg",
+    "./images/backgrounds/background-red1.jpg",
+    "./images/backgrounds/background-red2.jpg",
+    "./images/backgrounds/background-red3.jpg",
+    "./images/backgrounds/background-white1.jpg",
+    "./images/backgrounds/background-white2.jpg",
+    "./images/backgrounds/background-green1.jpg"
+  ];
+
+  let currentIndex = 0;
+  const backgroundButton = document.getElementById("backgroundButton");
+
+  backgroundButton.addEventListener("click", function (event) {
+    event.preventDefault();
+    changeBackground(images, currentIndex);
+    currentIndex = (currentIndex + 1) % images.length;
+  });
+}
+
+// Function to change background image
+function changeBackground(images, currentIndex) {
+  const selectedImage = images[currentIndex];
+  document.body.style.backgroundImage = `url('${selectedImage}')`;
+  document.body.style.backgroundRepeat = "no-repeat";
+  document.body.style.backgroundPosition = "center";
+  document.body.style.backgroundSize = "cover";
+}
+
+// Function to initialize settings toggle
+function initializeSettingsToggle() {
+  const toggleButton = document.getElementById("toggleSettingsButton");
+  const settingsDiv = document.getElementById("settingsHide");
+
+  toggleButton.addEventListener("click", function (event) {
+    event.preventDefault();
+    toggleSettingsVisibility(settingsDiv);
+  });
+
+  settingsDiv.classList.add("hidden");
+}
+
+// Function to toggle settings visibility
+function toggleSettingsVisibility(settingsDiv) {
+  if (settingsDiv.classList.contains("hidden")) {
+    settingsDiv.classList.remove("hidden");
+    settingsDiv.classList.add("visible");
+  } else {
+    settingsDiv.classList.remove("visible");
+    settingsDiv.classList.add("hidden");
+  }
+}
+
+function deleteMsgAction() {
+  let deleteMsg = document.getElementById("deleteMsg");
+  let userMessage = document.getElementById("userMessage");
+
+  deleteMsg.addEventListener("click", function (event) {
+    event.preventDefault();
+    userMessage.value = ""; // Clear the content of the textarea
+  });
+}
+
 function initializeVoiceRecognition() {
   const voiceInputButton = document.getElementById("voiceInputButton");
   const recordSound = document.getElementById("recordSound");
@@ -192,74 +288,40 @@ function initializeVoiceRecognition() {
   }
 }
 
-// Function to initialize background change functionality
-function initializeBackgroundChange() {
-  const images = [
-    "./images/backgrounds/background-blue1.jpg",
-    "./images/backgrounds/background-blue2.jpg",
-    "./images/backgrounds/background-blue3.jpg",
-    "./images/backgrounds/background-red1.jpg",
-    "./images/backgrounds/background-red2.jpg",
-    "./images/backgrounds/background-red3.jpg",
-    "./images/backgrounds/background-white1.jpg",
-    "./images/backgrounds/background-white2.jpg",
-    "./images/backgrounds/background-green1.jpg"
-  ];
+// Function to display the user's message
+function displayUserMessage(message, chatContainer) {
+  let newMessage = document.createElement("p");
 
-  let currentIndex = 0;
-  const backgroundButton = document.getElementById("backgroundButton");
+  let userLabel = document.createElement("span");
+  userLabel.className = "user-label";
+  userLabel.textContent = "You: ";
 
-  backgroundButton.addEventListener("click", function (event) {
-    event.preventDefault();
-    changeBackground(images, currentIndex);
-    currentIndex = (currentIndex + 1) % images.length;
-  });
+  let messageContent = document.createElement("span");
+  messageContent.className = "user-message";
+  messageContent.textContent = message;
+
+  newMessage.appendChild(userLabel);
+  newMessage.appendChild(messageContent);
+  chatContainer.appendChild(newMessage);
 }
 
-// Function to change background image
-function changeBackground(images, currentIndex) {
-  const selectedImage = images[currentIndex];
-  document.body.style.backgroundImage = `url('${selectedImage}')`;
-  document.body.style.backgroundRepeat = "no-repeat";
-  document.body.style.backgroundPosition = "center";
-  document.body.style.backgroundSize = "cover";
+function displayBotMessage(message, chatContainer) {
+  let newMessage = document.createElement("p");
+
+  let botLabel = document.createElement("span");
+  botLabel.className = "bot-label";
+  botLabel.textContent = "Bot: ";
+
+  let messageContent = document.createElement("span");
+  messageContent.className = "bot-message";
+  messageContent.textContent = message;
+
+  newMessage.appendChild(botLabel);
+  newMessage.appendChild(messageContent);
+  chatContainer.appendChild(newMessage);
 }
 
-// Function to initialize settings toggle
-function initializeSettingsToggle() {
-  const toggleButton = document.getElementById("toggleSettingsButton");
-  const settingsDiv = document.getElementById("settingsHide");
-
-  toggleButton.addEventListener("click", function (event) {
-    event.preventDefault();
-    toggleSettingsVisibility(settingsDiv);
-  });
-
-  settingsDiv.classList.add("hidden");
-}
-
-// Function to toggle settings visibility
-function toggleSettingsVisibility(settingsDiv) {
-  if (settingsDiv.classList.contains("hidden")) {
-    settingsDiv.classList.remove("hidden");
-    settingsDiv.classList.add("visible");
-  } else {
-    settingsDiv.classList.remove("visible");
-    settingsDiv.classList.add("hidden");
-  }
-}
-
-function deleteMsgAction() {
-  let deleteMsg = document.getElementById("deleteMsg");
-  let userMessage = document.getElementById("userMessage");
-
-  deleteMsg.addEventListener("click", function (event) {
-    event.preventDefault();
-    userMessage.value = ""; // Clear the content of the textarea
-  });
-}
-
-function sendMsgAction() {
+async function sendMsgAction() {
   let sendMessage = document.getElementById("sendMessage");
   let mainChatMessage = document.getElementById("mainChatMessage");
   let userMessage = document.getElementById("userMessage");
@@ -278,44 +340,18 @@ function sendMsgAction() {
       userMessage.value = "";
 
       // Get bot's response
-      let botResponse = await getBotResponse(message);
+      try {
+        let botResponse = await getBotMessage(message);
 
-      // Display bot's response
-      displayBotMessage(botResponse, mainChatMessage);
+        // Display bot's response
+        displayBotMessage(botResponse, mainChatMessage);
+      } catch (error) {
+        console.error("Failed to get bot message:", error);
+        displayBotMessage(
+          "Sorry, something went wrong. Please try again.",
+          mainChatMessage
+        );
+      }
     }
   });
-}
-
-// Function to display the user's message
-function displayUserMessage(message, chatContainer) {
-  let newMessage = document.createElement("p");
-
-  let userLabel = document.createElement("span");
-  userLabel.className = "user-label";
-  userLabel.textContent = "You: ";
-
-  let messageContent = document.createElement("span");
-  messageContent.className = "user-message";
-  messageContent.textContent = message;
-
-  newMessage.appendChild(userLabel);
-  newMessage.appendChild(messageContent);
-  chatContainer.appendChild(newMessage);
-}
-
-// Function to display the bot's message
-function displayBotMessage(message, chatContainer) {
-  let newMessage = document.createElement("p");
-
-  let botLabel = document.createElement("span");
-  botLabel.className = "bot-label";
-  botLabel.textContent = "Bot: ";
-
-  let messageContent = document.createElement("span");
-  messageContent.className = "bot-message";
-  messageContent.textContent = message;
-
-  newMessage.appendChild(botLabel);
-  newMessage.appendChild(messageContent);
-  chatContainer.appendChild(newMessage);
 }

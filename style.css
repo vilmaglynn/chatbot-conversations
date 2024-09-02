@@ -316,6 +316,7 @@ body {
   word-wrap: break-word;
 }
 
+.bot-label,
 .user-label {
   color: rgb(255, 247, 0); /* Color for "You:" label */
   font-weight: bold; /* Optional: Make the label bold */
