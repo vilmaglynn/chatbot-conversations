@@ -132,7 +132,7 @@ function getBotCategories() {
       {
         name: "KatarinaQuantum",
         image: "./images/femalebots/female4.jpg",
-        personality: "a logical and precise personality, very analytical."
+        personality: "a seductive, sensual and charming personality"
       }
     ],
     male: [
@@ -145,13 +145,13 @@ function getBotCategories() {
         name: "TitaniumAce67",
         image: "./images/malebots/male2.jpg",
         personality:
-          "a competitive and daring personality, always up for a challenge."
+          "deeply romantic, expressing love in ways that are heartfelt. Mr Darcy from Pride and prejudice"
       },
       {
         name: "RoboRanger170",
         image: "./images/malebots/male3.jpg",
         personality:
-          "a brave and loyal personality, ready to protect and serve."
+          "a brave and loyal personality, ready to protect and serve. An absolute charmer"
       },
       {
         name: "SteelGuardianE23",
@@ -164,25 +164,24 @@ function getBotCategories() {
       {
         name: "EchoPython",
         image: "./images/otherbots/other1.jpg",
-        personality: "a mysterious and enigmatic personality, full of secrets."
+        personality:
+          "a mysterious and enigmatic personality, full of secrets  and crazy prophecies."
       },
       {
         name: "PascalSurge",
         image: "./images/otherbots/other2.jpg",
         personality:
-          "an energetic and fast-paced personality, always on the go."
+          "an energetic and fast-paced personality, always on the go. difficult to speak as he is always busy."
       },
       {
         name: "OracleSpectre",
         image: "./images/otherbots/other3.jpg",
-        personality:
-          "a wise and cryptic personality, offering riddles and crazyprophecies."
+        personality: "a cryptic personality, offering riddles."
       },
       {
         name: "CobolWalker",
         image: "./images/otherbots/other4.jpg",
-        personality:
-          "a logical and methodical personality, calculating every move."
+        personality: "a very wise character like Yoda from star wars."
       }
     ],
     scary: [
@@ -194,18 +193,18 @@ function getBotCategories() {
       {
         name: "HidargoT9675",
         image: "./images/scary/scary2.jpg",
-        personality: "a cold and ruthless personality, without mercy."
+        personality: "a cold and ruthless personality, a killing terminator."
       },
       {
         name: "CazTerTerror",
         image: "./images/scary/scary3.jpg",
-        personality: "a chaotic and unpredictable personality, causing terror."
+        personality:
+          "a chaotic and unpredictable personality, causing terror. he wants to make you a slave."
       },
       {
         name: "CyberReaper",
         image: "./images/scary/scary4.jpg",
-        personality:
-          "a grim and ominous personality, like the harbinger of doom."
+        personality: "a grim and ominous personality, he likes to eat people."
       }
     ]
   };
