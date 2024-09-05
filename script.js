@@ -269,18 +269,7 @@ function toggleSettingsVisibility(settingsDiv) {
 
 const apiUrl =
   "https://cheapest-gpt-4-turbo-gpt-4-vision-chatgpt-openai-ai-api.p.rapidapi.com/v1/chat/completions";
-const API_KEY = "1dc16be9ccmsh6df3721a5f10d2ap1f1670jsn2d50fb26ca53"; // Replace with your API key
-
-// Function to get a bot's personality based on selected bot type and name
-function getBotPersonality(selectedBotType, selectedBotName) {
-  const botCategories = getBotCategories();
-  const botCategory = botCategories[selectedBotType];
-  if (botCategory) {
-    const selectedBot = botCategory.find((bot) => bot.name === selectedBotName);
-    return selectedBot ? selectedBot.personality : "";
-  }
-  return "";
-}
+const API_KEY = process.env.REACT_APP_API_KEY; // Access from environment variables
 
 // Function to get the bot's message using the selected bot's personality
 async function getBotMessage(userMessage) {
@@ -329,6 +318,34 @@ async function getBotMessage(userMessage) {
 
     const result = await response.json();
     return result.choices[0].message.content;
+  } catch (error) {
+    console.error("Failed to get bot message:", error);
+    return "Sorry, something went wrong. Please try again.";
+  }
+}
+
+async function getBotMessage(userMessage) {
+  if (!selectedBot.name || !selectedBot.type) {
+    return "No bot selected. Please select a bot before sending a message.";
+  }
+
+  try {
+    // Make a request to your Netlify function
+    const response = await fetch("/.netlify/functions/getBotMessage", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        userMessage,
+        selectedBot
+      })
+    });
+
+    if (!response.ok) {
+      throw new Error(`Error: ${response.status}`);
+    }
+
+    const result = await response.json();
+    return result.botResponse;
   } catch (error) {
     console.error("Failed to get bot message:", error);
     return "Sorry, something went wrong. Please try again.";
