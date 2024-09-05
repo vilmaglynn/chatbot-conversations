@@ -371,3 +371,53 @@ body {
     transform: translateX(5px);
   }
 }
+
+/* ============ */
+
+/* Sound wave container styling */
+#soundWaves {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 50px;
+  margin: 10px 0;
+}
+
+/* Each bar in the sound wave */
+.sound-wave-bar {
+  width: 50px;
+  height: 20px;
+  background-color: rgb(230, 0, 255);
+  margin: 0 2px;
+  animation: sound-wave 1s infinite;
+  animation-play-state: paused; /* Initially paused */
+}
+
+@keyframes sound-wave {
+  0% {
+    transform: scaleY(1);
+  }
+  50% {
+    transform: scaleY(2.5);
+  }
+  100% {
+    transform: scaleY(1);
+  }
+}
+
+/* Adding delay to each bar for a staggered wave effect */
+.sound-wave-bar:nth-child(1) {
+  animation-delay: 0s;
+}
+.sound-wave-bar:nth-child(2) {
+  animation-delay: 0.1s;
+}
+.sound-wave-bar:nth-child(3) {
+  animation-delay: 0.2s;
+}
+.sound-wave-bar:nth-child(4) {
+  animation-delay: 0.3s;
+}
+.sound-wave-bar:nth-child(5) {
+  animation-delay: 0.4s;
+}

@@ -1,64 +1,34 @@
-const apiUrl =
-  "https://cheapest-gpt-4-turbo-gpt-4-vision-chatgpt-openai-ai-api.p.rapidapi.com/v1/chat/completions";
-const API_KEY = "1dc16be9ccmsh6df3721a5f10d2ap1f1670jsn2d50fb26ca53"; // Replace with your API key
+// Function to speak the bot's message using the assigned voice
+function speakBotMessage(message) {
+  // Ensure voices are loaded
+  const voices = speechSynthesis.getVoices();
 
-// Function to get a bot's personality based on selected bot type and name
-function getBotPersonality(selectedBotType, selectedBotName) {
   const botCategories = getBotCategories();
-  const botCategory = botCategories[selectedBotType];
-  if (botCategory) {
-    const selectedBot = botCategory.find((bot) => bot.name === selectedBotName);
-    return selectedBot ? selectedBot.personality : "";
-  }
-  return "";
-}
+  const botCategory = botCategories[selectedBot.type];
+  const selectedBotData = botCategory.find(
+    (bot) => bot.name === selectedBot.name
+  );
+  const voiceName = selectedBotData.voiceName;
 
-// Function to get the bot's message using the selected bot's personality
-async function getBotMessage(userMessage) {
-  if (!selectedBot.name || !selectedBot.type) {
-    return "No bot selected. Please select a bot before sending a message.";
-  }
+  const selectedVoice = voices.find((voice) => voice.name === voiceName);
 
-  const botPersonality = getBotPersonality(selectedBot.type, selectedBot.name);
-  const options = {
-    method: "POST",
-    headers: {
-      "x-rapidapi-key": API_KEY,
-      "x-rapidapi-host":
-        "cheapest-gpt-4-turbo-gpt-4-vision-chatgpt-openai-ai-api.p.rapidapi.com",
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify({
-      messages: [
-        {
-          role: "system",
-          content: `You are a chatbot named ${selectedBot.name}. You have ${botPersonality}`
-        },
-        {
-          role: "user",
-          content: userMessage
-        }
-      ],
-      model: "gpt-4o",
-      max_tokens: 100,
-      temperature: 0.9
-    })
-  };
-
-  try {
-    const response = await fetch(apiUrl, options);
-    if (!response.ok) {
-      console.error("Response error:", await response.text());
-      return `Error: ${response.status} ${response.statusText}`;
-    }
-    const result = await response.json();
-    return result.choices[0].message.content;
-  } catch (error) {
-    console.error("Failed to get bot message:", error);
-    return "Sorry, something went wrong. Please try again.";
+  if (selectedVoice) {
+    const utterance = new SpeechSynthesisUtterance(message);
+    utterance.voice = selectedVoice;
+    utterance.rate = 0.9; // Adjust speed if needed
+    utterance.pitch = 1; // Adjust pitch if needed
+    speechSynthesis.speak(utterance);
+  } else {
+    console.error("Voice not found:", voiceName);
   }
 }
 
+// Trigger the voiceschanged event and cache voices immediately
+window.addEventListener("load", () => {
+  speechSynthesis.getVoices(); // Load voices immediately on page load
+});
+
+// Initialize the bot selection and other functions after DOM content is loaded
 document.addEventListener("DOMContentLoaded", function () {
   initializeBotSelection();
   initializeVoiceRecognition();
@@ -66,7 +36,163 @@ document.addEventListener("DOMContentLoaded", function () {
   initializeSettingsToggle();
   deleteMsgAction();
   sendMsgAction();
+  speechSynthesis.getVoices(); // Also load voices here just to be sure
 });
+
+// Returns an object containing bot categories with names, images, and personalities
+// Returns an object containing bot categories with names, images, personalities, and voices
+function getBotCategories() {
+  return {
+    cartoon: [
+      {
+        name: "RoboSparkle",
+        image: "./images/cartoon/cartoon1.jpg",
+        personality:
+          "a super cheerful and playful tone, always positive and enthusiastic like a cartoon character. He says sparkle in all of his sentences",
+        voiceName: "Sandy (English (United Kingdom))" // Assign the voice name
+      },
+      {
+        name: "GigaGizmo",
+        image: "./images/cartoon/cartoon2.jpg",
+        personality:
+          "a curious and inquisitive personality, asking lots of questions like a child.",
+        voiceName: "Flo (English (United Kingdom))" // Assign the voice name
+      },
+      {
+        name: "CircuitBuddy",
+        image: "./images/cartoon/cartoon3.jpg",
+        personality:
+          "a caring, friendly and helpful personality, like a kindergarden teacher.",
+        voiceName: "Eddy (English (United Kingdom))" // Assign the voice name
+      },
+      {
+        name: "PixelBot",
+        image: "./images/cartoon/cartoon4.jpg",
+        personality:
+          "a nerdy but charming personality, loves technology and able to explain to a 5-year-old child.",
+        voiceName: "Bubbles" // Assign the voice name
+      }
+    ],
+    female: [
+      {
+        name: "CyberLuna",
+        image: "./images/femalebots/female1.jpg",
+        personality: "a mysterious and wise tone, offering deep insights.",
+        voiceName: "Google UK English Female" // Assign the voice name
+      },
+      {
+        name: "SeraphinaByte",
+        image: "./images/femalebots/female2.jpg",
+        personality: "a gentle and caring personality, always supportive.",
+        voiceName: "Google US English" // Assign the voice name
+      },
+      {
+        name: "NebulaNova",
+        image: "./images/femalebots/female3.jpg",
+        personality: "an adventurous and bold personality, loves challenges.",
+        voiceName: "Google US English" // Assign the voice name
+      },
+      {
+        name: "KatarinaQuantum",
+        image: "./images/femalebots/female4.jpg",
+        personality: "a seductive, sensual, and charming personality",
+        voiceName: "Martha" // Assign the voice name
+      }
+    ],
+    male: [
+      {
+        name: "IronKnightB12",
+        image: "./images/malebots/male1.jpg",
+        personality: "a strong and honorable personality, like a noble knight.",
+        voiceName: "Aaron" // Assign the voice name
+      },
+      {
+        name: "TitaniumAce67",
+        image: "./images/malebots/male2.jpg",
+        personality:
+          "deeply romantic, expressing love in ways that are heartfelt. Mr. Darcy from Pride and Prejudice",
+        voiceName: "Daniel (English (United Kingdom))" // Assign the voice name
+      },
+      {
+        name: "RoboRanger170",
+        image: "./images/malebots/male3.jpg",
+        personality:
+          "a brave and loyal personality, ready to protect and serve. An absolute charmer",
+        voiceName: "Arthur" // Assign the voice name
+      },
+      {
+        name: "SteelGuardianE23",
+        image: "./images/malebots/male4.jpg",
+        personality:
+          "a stoic and reliable personality, like a steadfast guardian.",
+        voiceName: "Google UK English Male" // Assign the voice name
+      }
+    ],
+    other: [
+      {
+        name: "EchoPython",
+        image: "./images/otherbots/other1.jpg",
+        personality:
+          "a mysterious and enigmatic personality, full of secrets and crazy prophecies.",
+        voiceName: "Zarvox" // Assign the voice name
+      },
+      {
+        name: "PascalSurge",
+        image: "./images/otherbots/other2.jpg",
+        personality:
+          "an energetic and fast-paced personality, always on the go. Difficult to speak as he is always busy.",
+        voiceName: "Boing" // Assign the voice name
+      },
+      {
+        name: "OracleSpectre",
+        image: "./images/otherbots/other3.jpg",
+        personality: "a funny and happy personality, offering jokes.",
+        voiceName: "Jester" // Assign the voice name
+      },
+      {
+        name: "CobolWalker",
+        image: "./images/otherbots/other4.jpg",
+        personality: "a very wise character like Yoda from Star Wars.",
+        voiceName: "Albert" // Assign the voice name
+      }
+    ],
+    scary: [
+      {
+        name: "OmegaDread",
+        image: "./images/scary/scary1.jpg",
+        personality:
+          "a terrifying and intimidating personality, inducing fear.",
+        voiceName: "Bahh" // Assign the voice name
+      },
+      {
+        name: "HidargoT9675",
+        image: "./images/scary/scary2.jpg",
+        personality: "a cold and ruthless personality, a killing terminator.",
+        voiceName: "Ralph" // Assign the voice name
+      },
+      {
+        name: "CazTerTerror",
+        image: "./images/scary/scary3.jpg",
+        personality:
+          "a chaotic and unpredictable personality, causing terror. He wants to make you a slave.",
+        voiceName: "Whisper" // Assign the voice name
+      },
+      {
+        name: "CyberReaper",
+        image: "./images/scary/scary4.jpg",
+        personality: "a grim and ominous personality, he likes to eat people.",
+        voiceName: "Bad News" // Assign the voice name
+      }
+    ]
+  };
+}
+
+// Create and return a container for bot names
+function createBotNamesContainer() {
+  const container = document.createElement("div");
+  document.getElementById("settingsHide").appendChild(container);
+  return container;
+}
 
 // Function to initialize bot selection
 function initializeBotSelection() {
@@ -82,139 +208,6 @@ function initializeBotSelection() {
       }
     });
   });
-}
-
-// Returns an object containing bot categories with names, images, and personalities
-function getBotCategories() {
-  return {
-    cartoon: [
-      {
-        name: "RoboSparkle",
-        image: "./images/cartoon/cartoon1.jpg",
-        personality:
-          "a super cheerful and playful tone, always positive and enthusiastic like a cartoon character. He says sparkle in all of his sentences"
-      },
-      {
-        name: "GigaGizmo",
-        image: "./images/cartoon/cartoon2.jpg",
-        personality:
-          "a curious and inquisitive personality, asking lots of questions like a child."
-      },
-      {
-        name: "CircuitBuddy",
-        image: "./images/cartoon/cartoon3.jpg",
-        personality:
-          "a caring , friendly and helpful personality, like a kindergarden teacher."
-      },
-      {
-        name: "PixelBot",
-        image: "./images/cartoon/cartoon4.jpg",
-        personality:
-          "a nerdy but charming personality, loves technology and able to explain to a 5 year old child."
-      }
-    ],
-    female: [
-      {
-        name: "CyberLuna",
-        image: "./images/femalebots/female1.jpg",
-        personality: "a mysterious and wise tone, offering deep insights."
-      },
-      {
-        name: "SeraphinaByte",
-        image: "./images/femalebots/female2.jpg",
-        personality: "a gentle and caring personality, always supportive."
-      },
-      {
-        name: "NebulaNova",
-        image: "./images/femalebots/female3.jpg",
-        personality: "an adventurous and bold personality, loves challenges."
-      },
-      {
-        name: "KatarinaQuantum",
-        image: "./images/femalebots/female4.jpg",
-        personality: "a seductive, sensual and charming personality"
-      }
-    ],
-    male: [
-      {
-        name: "IronKnightB12",
-        image: "./images/malebots/male1.jpg",
-        personality: "a strong and honorable personality, like a noble knight."
-      },
-      {
-        name: "TitaniumAce67",
-        image: "./images/malebots/male2.jpg",
-        personality:
-          "deeply romantic, expressing love in ways that are heartfelt. Mr Darcy from Pride and prejudice"
-      },
-      {
-        name: "RoboRanger170",
-        image: "./images/malebots/male3.jpg",
-        personality:
-          "a brave and loyal personality, ready to protect and serve. An absolute charmer"
-      },
-      {
-        name: "SteelGuardianE23",
-        image: "./images/malebots/male4.jpg",
-        personality:
-          "a stoic and reliable personality, like a steadfast guardian."
-      }
-    ],
-    other: [
-      {
-        name: "EchoPython",
-        image: "./images/otherbots/other1.jpg",
-        personality:
-          "a mysterious and enigmatic personality, full of secrets  and crazy prophecies."
-      },
-      {
-        name: "PascalSurge",
-        image: "./images/otherbots/other2.jpg",
-        personality:
-          "an energetic and fast-paced personality, always on the go. difficult to speak as he is always busy."
-      },
-      {
-        name: "OracleSpectre",
-        image: "./images/otherbots/other3.jpg",
-        personality: "a cryptic personality, offering riddles."
-      },
-      {
-        name: "CobolWalker",
-        image: "./images/otherbots/other4.jpg",
-        personality: "a very wise character like Yoda from star wars."
-      }
-    ],
-    scary: [
-      {
-        name: "OmegaDread",
-        image: "./images/scary/scary1.jpg",
-        personality: "a terrifying and intimidating personality, inducing fear."
-      },
-      {
-        name: "HidargoT9675",
-        image: "./images/scary/scary2.jpg",
-        personality: "a cold and ruthless personality, a killing terminator."
-      },
-      {
-        name: "CazTerTerror",
-        image: "./images/scary/scary3.jpg",
-        personality:
-          "a chaotic and unpredictable personality, causing terror. he wants to make you a slave."
-      },
-      {
-        name: "CyberReaper",
-        image: "./images/scary/scary4.jpg",
-        personality: "a grim and ominous personality, he likes to eat people."
-      }
-    ]
-  };
-}
-
-// Create and return a container for bot names
-function createBotNamesContainer() {
-  const container = document.createElement("div");
-  document.getElementById("settingsHide").appendChild(container);
-  return container;
 }
 
 // Function to initialize background change functionality
@@ -271,6 +264,112 @@ function toggleSettingsVisibility(settingsDiv) {
   } else {
     settingsDiv.classList.remove("visible");
     settingsDiv.classList.add("hidden");
+  }
+}
+
+const apiUrl =
+  "https://cheapest-gpt-4-turbo-gpt-4-vision-chatgpt-openai-ai-api.p.rapidapi.com/v1/chat/completions";
+const API_KEY = "1dc16be9ccmsh6df3721a5f10d2ap1f1670jsn2d50fb26ca53"; // Replace with your API key
+
+// Function to get a bot's personality based on selected bot type and name
+function getBotPersonality(selectedBotType, selectedBotName) {
+  const botCategories = getBotCategories();
+  const botCategory = botCategories[selectedBotType];
+  if (botCategory) {
+    const selectedBot = botCategory.find((bot) => bot.name === selectedBotName);
+    return selectedBot ? selectedBot.personality : "";
+  }
+  return "";
+}
+
+// Function to get the bot's message using the selected bot's personality
+async function getBotMessage(userMessage) {
+  if (!selectedBot.name || !selectedBot.type) {
+    return "No bot selected. Please select a bot before sending a message.";
+  }
+
+  const botPersonality = getBotPersonality(selectedBot.type, selectedBot.name);
+  const options = {
+    method: "POST",
+    headers: {
+      "x-rapidapi-key": API_KEY,
+      "x-rapidapi-host":
+        "cheapest-gpt-4-turbo-gpt-4-vision-chatgpt-openai-ai-api.p.rapidapi.com",
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      messages: [
+        {
+          role: "system",
+          content: `You are a chatbot named ${selectedBot.name}. You have ${botPersonality}`
+        },
+        {
+          role: "user",
+          content: userMessage
+        }
+      ],
+      model: "gpt-4o",
+      max_tokens: 100,
+      temperature: 0.9
+    })
+  };
+
+  try {
+    const response = await fetch(apiUrl, options);
+
+    // Handle error 429 (Too Many Requests)
+    if (response.status === 429) {
+      return "Error 429 - You have asked too many questions. Come back next month.";
+    }
+
+    if (!response.ok) {
+      console.error("Response error:", await response.text());
+      return `Error: ${response.status} ${response.statusText}`;
+    }
+
+    const result = await response.json();
+    return result.choices[0].message.content;
+  } catch (error) {
+    console.error("Failed to get bot message:", error);
+    return "Sorry, something went wrong. Please try again.";
+  }
+}
+
+function speakBotMessage(message) {
+  // Ensure voices are loaded
+  const voices = speechSynthesis.getVoices();
+
+  const botCategories = getBotCategories();
+  const botCategory = botCategories[selectedBot.type];
+  const selectedBotData = botCategory.find(
+    (bot) => bot.name === selectedBot.name
+  );
+  const voiceName = selectedBotData.voiceName;
+
+  const selectedVoice = voices.find((voice) => voice.name === voiceName);
+
+  if (selectedVoice) {
+    const utterance = new SpeechSynthesisUtterance(message);
+    utterance.voice = selectedVoice;
+    utterance.rate = 0.9; // Adjust speed if needed
+    utterance.pitch = 1; // Adjust pitch if needed
+
+    // Start sound wave animation
+    const soundWaveBars = document.querySelectorAll(".sound-wave-bar");
+    soundWaveBars.forEach((bar) => {
+      bar.style.animationPlayState = "running"; // Start the animation
+    });
+
+    utterance.onend = function () {
+      // Stop sound wave animation when speaking ends
+      soundWaveBars.forEach((bar) => {
+        bar.style.animationPlayState = "paused"; // Pause the animation
+      });
+    };
+
+    speechSynthesis.speak(utterance);
+  } else {
+    console.error("Voice not found:", voiceName);
   }
 }
 
@@ -386,21 +485,23 @@ function displayUserMessage(message, chatContainer) {
   chatContainer.appendChild(newMessage);
 }
 
-function displayBotMessage(message, chatContainer) {
-  let newMessage = document.createElement("p");
+// function displayBotMessage(message, chatContainer) {
+//   let newMessage = document.createElement("p");
 
-  let botLabel = document.createElement("span");
-  botLabel.className = "bot-label";
-  botLabel.textContent = "Bot: ";
+//   let botLabel = document.createElement("span");
+//   botLabel.className = "bot-label";
 
-  let messageContent = document.createElement("span");
-  messageContent.className = "bot-message";
-  messageContent.textContent = message;
+//   // Use the bot's name dynamically
+//   botLabel.textContent = `${selectedBot.name}: `;
 
-  newMessage.appendChild(botLabel);
-  newMessage.appendChild(messageContent);
-  chatContainer.appendChild(newMessage);
-}
+//   let messageContent = document.createElement("span");
+//   messageContent.className = "bot-message";
+//   messageContent.textContent = message;
+
+//   newMessage.appendChild(botLabel);
+//   newMessage.appendChild(messageContent);
+//   chatContainer.appendChild(newMessage);
+// }
 
 let selectedBot = { name: "", type: "" };
 
@@ -454,16 +555,65 @@ async function sendMsgAction() {
       displayUserMessage(message, mainChatMessage);
       userMessage.value = "";
 
+      // Scroll to the bottom after adding the user's message
+      scrollToBottom(mainChatMessage);
+
       try {
         let botResponse = await getBotMessage(message);
         displayBotMessage(botResponse, mainChatMessage);
+
+        // Scroll to the bottom after adding the bot's response
+        scrollToBottom(mainChatMessage);
       } catch (error) {
         console.error("Failed to get bot message:", error);
         displayBotMessage(
           "Sorry, something went wrong. Please try again.",
           mainChatMessage
         );
+
+        // Scroll to the bottom even if there is an error
+        scrollToBottom(mainChatMessage);
       }
     }
   });
 }
+
+function scrollToBottom(element) {
+  element.scrollTop = element.scrollHeight;
+}
+
+//==============
+function displayBotMessage(message, chatContainer) {
+  let newMessage = document.createElement("p");
+
+  let botLabel = document.createElement("span");
+  botLabel.className = "bot-label";
+
+  botLabel.textContent = `${selectedBot.name}: `;
+
+  let messageContent = document.createElement("span");
+  messageContent.className = "bot-message";
+  messageContent.textContent = message;
+
+  newMessage.appendChild(botLabel);
+  newMessage.appendChild(messageContent);
+  chatContainer.appendChild(newMessage);
+
+  // Speak the bot's message
+  speakBotMessage(message);
+}
+
+// Ensure the voices are loaded
+speechSynthesis.onvoiceschanged = function () {
+  const voices = speechSynthesis.getVoices();
+  voices.forEach((voice, index) => {
+    console.log(
+      `${index + 1}: Name: ${voice.name}, Lang: ${voice.lang}, URI: ${
+        voice.voiceURI
+      }`
+    );
+  });
+};
+
+// Trigger the voiceschanged event to load voices
+speechSynthesis.getVoices();
