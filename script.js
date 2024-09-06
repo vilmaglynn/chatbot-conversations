@@ -269,29 +269,6 @@ function toggleSettingsVisibility(settingsDiv) {
 const apiUrl = "http://localhost:5500/.netlify/functions/getBotMessage";
 
 // Function to get the bot's message using the selected bot's personality
-async function getBotMessage(userMessage) {
-  if (!selectedBot.name || !selectedBot.type) {
-    return "No bot selected. Please select a bot before sending a message.";
-  }
-
-  try {
-    const response = await fetch("/.netlify/functions/getBotMessage", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ userMessage, selectedBot })
-    });
-
-    if (!response.ok) {
-      throw new Error(`Error: ${response.status}`);
-    }
-
-    const result = await response.json();
-    return result.botResponse;
-  } catch (error) {
-    console.error("Failed to get bot message:", error);
-    return "Sorry, something went wrong. Please try again.";
-  }
-}
 
 // Function to get the bot's message using the selected bot's personality
 async function getBotMessage(userMessage) {
