@@ -266,6 +266,7 @@ function toggleSettingsVisibility(settingsDiv) {
     settingsDiv.classList.add("hidden");
   }
 }
+const apiUrl = "http://localhost:5500/.netlify/functions/getBotMessage";
 
 // Function to get the bot's message using the selected bot's personality
 async function getBotMessage(userMessage) {
