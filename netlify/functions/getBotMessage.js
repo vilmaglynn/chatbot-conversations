@@ -1,75 +1,60 @@
 const fetch = require("node-fetch");
 
 exports.handler = async function (event, context) {
-  try {
-    // Parse the request body from the frontend
-    const { userMessage, selectedBot } = JSON.parse(event.body);
+  // Parse the incoming event body
+  const { userMessage, selectedBot } = JSON.parse(event.body);
 
-    if (!userMessage || !selectedBot) {
-      return {
-        statusCode: 400,
-        body: JSON.stringify({
-          error: "Invalid request: Missing userMessage or selectedBot"
-        })
-      };
-    }
-
-    // Fetch API_KEY from environment variable
-    const apiKey = process.env.API_KEY;
-    const apiUrl =
-      "https://cheapest-gpt-4-turbo-gpt-4-vision-chatgpt-openai-ai-api.p.rapidapi.com/v1/chat/completions";
-
-    // Prepare the request to the external API
-    const options = {
-      method: "POST",
-      headers: {
-        "x-rapidapi-key": apiKey,
-        "x-rapidapi-host":
-          "cheapest-gpt-4-turbo-gpt-4-vision-chatgpt-openai-ai-api.p.rapidapi.com",
-        "Content-Type": "application/json"
-      },
+  // Validate that the required information is provided
+  if (!userMessage || !selectedBot) {
+    return {
+      statusCode: 400,
       body: JSON.stringify({
-        messages: [
-          {
-            role: "system",
-            content: `You are a chatbot named ${selectedBot.name}. You have ${selectedBot.personality}`
-          },
-          {
-            role: "user",
-            content: userMessage
-          }
-        ],
-        model: "gpt-4o",
-        max_tokens: 100,
-        temperature: 0.9
+        error: "Invalid request: Missing userMessage or selectedBot"
       })
     };
+  }
 
-    // Make the API request
+  const API_KEY = process.env.API_KEY; // Securely access the API key
+
+  const apiUrl =
+    "https://cheapest-gpt-4-turbo-gpt-4-vision-chatgpt-openai-ai-api.p.rapidapi.com/v1/chat/completions";
+
+  // Prepare the request options, including bot personality info in the system message
+  const options = {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${API_KEY}`
+    },
+    body: JSON.stringify({
+      model: selectedBot.type,
+      messages: [
+        {
+          role: "system",
+          content: `You are a chatbot named ${selectedBot.name}. You have ${selectedBot.personality}.`
+        },
+        {
+          role: "user",
+          content: userMessage
+        }
+      ]
+    })
+  };
+
+  // Attempt the API call
+  try {
     const response = await fetch(apiUrl, options);
+    const data = await response.json();
 
-    if (!response.ok) {
-      return {
-        statusCode: response.status,
-        body: JSON.stringify({
-          error: `API request failed with status: ${response.statusText}`
-        })
-      };
-    }
-
-    const result = await response.json();
-    const botResponse = result.choices[0].message.content;
-
-    // Return the bot response as JSON
     return {
       statusCode: 200,
-      body: JSON.stringify({ botResponse })
+      body: JSON.stringify({ botResponse: data.choices[0].message.content })
     };
   } catch (error) {
-    console.error("Error in serverless function:", error);
+    console.error("Error:", error);
     return {
       statusCode: 500,
-      body: JSON.stringify({ error: "Internal Server Error" })
+      body: JSON.stringify({ error: "Failed to get bot message" })
     };
   }
 };

@@ -267,10 +267,6 @@ function toggleSettingsVisibility(settingsDiv) {
   }
 }
 
-const apiUrl =
-  "https://cheapest-gpt-4-turbo-gpt-4-vision-chatgpt-openai-ai-api.p.rapidapi.com/v1/chat/completions";
-const API_KEY = process.env.REACT_APP_API_KEY; // Access from environment variables
-
 // Function to get the bot's message using the selected bot's personality
 async function getBotMessage(userMessage) {
   if (!selectedBot.name || !selectedBot.type) {
@@ -296,20 +292,19 @@ async function getBotMessage(userMessage) {
   }
 }
 
+// Function to get the bot's message using the selected bot's personality
 async function getBotMessage(userMessage) {
+  // Validate selectedBot and userMessage
   if (!selectedBot.name || !selectedBot.type) {
     return "No bot selected. Please select a bot before sending a message.";
   }
 
   try {
-    // Make a request to your Netlify function
+    // Make a request to the serverless function with userMessage and selectedBot
     const response = await fetch("/.netlify/functions/getBotMessage", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        userMessage,
-        selectedBot
-      })
+      body: JSON.stringify({ userMessage, selectedBot })
     });
 
     if (!response.ok) {
