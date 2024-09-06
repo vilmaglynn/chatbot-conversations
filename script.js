@@ -266,31 +266,69 @@ function toggleSettingsVisibility(settingsDiv) {
     settingsDiv.classList.add("hidden");
   }
 }
-const apiUrl = "http://localhost:5500/.netlify/functions/getBotMessage";
 
-// Function to get the bot's message using the selected bot's personality
+const apiUrl =
+  "https://cheapest-gpt-4-turbo-gpt-4-vision-chatgpt-openai-ai-api.p.rapidapi.com/v1/chat/completions";
+const API_KEY = "1dc16be9ccmsh6df3721a5f10d2ap1f1670jsn2d50fb26ca53"; // Replace with your API key
+
+// Function to get a bot's personality based on selected bot type and name
+function getBotPersonality(selectedBotType, selectedBotName) {
+  const botCategories = getBotCategories();
+  const botCategory = botCategories[selectedBotType];
+  if (botCategory) {
+    const selectedBot = botCategory.find((bot) => bot.name === selectedBotName);
+    return selectedBot ? selectedBot.personality : "";
+  }
+  return "";
+}
 
 // Function to get the bot's message using the selected bot's personality
 async function getBotMessage(userMessage) {
-  // Validate selectedBot and userMessage
   if (!selectedBot.name || !selectedBot.type) {
     return "No bot selected. Please select a bot before sending a message.";
   }
 
+  const botPersonality = getBotPersonality(selectedBot.type, selectedBot.name);
+  const options = {
+    method: "POST",
+    headers: {
+      "x-rapidapi-key": API_KEY,
+      "x-rapidapi-host":
+        "cheapest-gpt-4-turbo-gpt-4-vision-chatgpt-openai-ai-api.p.rapidapi.com",
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      messages: [
+        {
+          role: "system",
+          content: `You are a chatbot named ${selectedBot.name}. You have ${botPersonality}`
+        },
+        {
+          role: "user",
+          content: userMessage
+        }
+      ],
+      model: "gpt-4o",
+      max_tokens: 100,
+      temperature: 0.9
+    })
+  };
+
   try {
-    // Make a request to the serverless function with userMessage and selectedBot
-    const response = await fetch("/.netlify/functions/getBotMessage", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ userMessage, selectedBot })
-    });
+    const response = await fetch(apiUrl, options);
+
+    // Handle error 429 (Too Many Requests)
+    if (response.status === 429) {
+      return "Error 429 - You have asked too many questions. Come back next month.";
+    }
 
     if (!response.ok) {
-      throw new Error(`Error: ${response.status}`);
+      console.error("Response error:", await response.text());
+      return `Error: ${response.status} ${response.statusText}`;
     }
 
     const result = await response.json();
-    return result.botResponse;
+    return result.choices[0].message.content;
   } catch (error) {
     console.error("Failed to get bot message:", error);
     return "Sorry, something went wrong. Please try again.";
