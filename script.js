@@ -279,7 +279,7 @@ function getBotPersonality(selectedBotType, selectedBotName) {
 }
 
 // Function to get the bot's message using the selected bot's personality
-const apiUrl = "/.netlify/functions/chatBotMessage"; // Netlify function URL
+const apiUrl = "/api/chatBotMessage";
 
 async function getBotMessage(userMessage) {
   if (!selectedBot.name || !selectedBot.type) {
