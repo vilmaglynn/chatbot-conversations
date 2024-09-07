@@ -1,5 +1,3 @@
-const fetch = require("node-fetch");
-
 exports.handler = async (event) => {
   const { userMessage, selectedBot } = JSON.parse(event.body);
   const apiUrl =
@@ -38,13 +36,23 @@ exports.handler = async (event) => {
         statusCode: response.status,
         body: JSON.stringify({
           error: `Error: ${response.status} ${response.statusText}`
-        })
+        }),
+        headers: {
+          "Access-Control-Allow-Origin": "*", // Allow all origins
+          "Access-Control-Allow-Methods": "OPTIONS, POST, GET",
+          "Access-Control-Allow-Headers": "Content-Type"
+        }
       };
     }
     const result = await response.json();
     return {
       statusCode: 200,
-      body: JSON.stringify({ message: result.choices[0].message.content })
+      body: JSON.stringify({ message: result.choices[0].message.content }),
+      headers: {
+        "Access-Control-Allow-Origin": "*", // Allow all origins
+        "Access-Control-Allow-Methods": "OPTIONS, POST, GET",
+        "Access-Control-Allow-Headers": "Content-Type"
+      }
     };
   } catch (error) {
     console.error("Failed to get bot message:", error);
@@ -52,7 +60,12 @@ exports.handler = async (event) => {
       statusCode: 500,
       body: JSON.stringify({
         error: "Sorry, something went wrong. Please try again."
-      })
+      }),
+      headers: {
+        "Access-Control-Allow-Origin": "*", // Allow all origins
+        "Access-Control-Allow-Methods": "OPTIONS, POST, GET",
+        "Access-Control-Allow-Headers": "Content-Type"
+      }
     };
   }
 };
