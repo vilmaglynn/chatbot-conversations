@@ -1,3 +1,14 @@
+// Function to get a bot's personality based on selected bot type and name
+function getBotPersonality(selectedBotType, selectedBotName) {
+  const botCategories = getBotCategories();
+  const botCategory = botCategories[selectedBotType];
+  if (botCategory) {
+    const selectedBot = botCategory.find((bot) => bot.name === selectedBotName);
+    return selectedBot ? selectedBot.personality : "";
+  }
+  return "";
+}
+
 // Function to speak the bot's message using the assigned voice
 function speakBotMessage(message) {
   // Ensure voices are loaded
