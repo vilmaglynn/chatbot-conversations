@@ -1,37 +1,16 @@
-const apiUrl =
-  "https://cheapest-gpt-4-turbo-gpt-4-vision-chatgpt-openai-ai-api.p.rapidapi.com/v1/chat/completions";
-const API_KEY = process.env.RAPIDAPI_KEY; // Use an environment variable for your API key
+const fetch = require("node-fetch");
 
 exports.handler = async (event) => {
-  switch (event.httpMethod) {
-    case "POST":
-      return handlePostRequest(event);
-    case "GET":
-      return handleGetRequest(event);
-    default:
-      return {
-        statusCode: 405,
-        body: JSON.stringify({ error: "Method Not Allowed" })
-      };
-  }
-};
+  const { userMessage, selectedBot } = JSON.parse(event.body);
+  const apiUrl =
+    "https://cheapest-gpt-4-turbo-gpt-4-vision-chatgpt-openai-ai-api.p.rapidapi.com/v1/chat/completions";
 
-async function handlePostRequest(event) {
-  const { userMessage, botName, botType } = JSON.parse(event.body);
-
-  if (!botName || !botType) {
-    return {
-      statusCode: 400,
-      body: JSON.stringify({ error: "No bot selected." })
-    };
-  }
-
-  const botPersonality = getBotPersonality(botType, botName);
+  const botPersonality = getBotPersonality(selectedBot.type, selectedBot.name); // Ensure this function is defined in your function
 
   const options = {
     method: "POST",
     headers: {
-      "x-rapidapi-key": API_KEY,
+      "x-rapidapi-key": process.env.RAPIDAPI_KEY,
       "x-rapidapi-host":
         "cheapest-gpt-4-turbo-gpt-4-vision-chatgpt-openai-ai-api.p.rapidapi.com",
       "Content-Type": "application/json"
@@ -40,7 +19,7 @@ async function handlePostRequest(event) {
       messages: [
         {
           role: "system",
-          content: `You are a chatbot named ${botName}. You have ${botPersonality}`
+          content: `You are a chatbot named ${selectedBot.name}. You have ${botPersonality}`
         },
         {
           role: "user",
@@ -59,7 +38,9 @@ async function handlePostRequest(event) {
       console.error("Response error:", await response.text());
       return {
         statusCode: response.status,
-        body: JSON.stringify({ error: response.statusText })
+        body: JSON.stringify({
+          error: `Error: ${response.status} ${response.statusText}`
+        })
       };
     }
     const result = await response.json();
@@ -71,20 +52,9 @@ async function handlePostRequest(event) {
     console.error("Failed to get bot message:", error);
     return {
       statusCode: 500,
-      body: JSON.stringify({ error: "Internal Server Error" })
+      body: JSON.stringify({
+        error: "Sorry, something went wrong. Please try again."
+      })
     };
   }
-}
-
-async function handleGetRequest(event) {
-  // Implement your GET request handling here if needed
-  return {
-    statusCode: 200,
-    body: JSON.stringify({ message: "GET request not supported" })
-  };
-}
-
-function getBotPersonality(selectedBotType, selectedBotName) {
-  // Define your bot categories and personalities here
-  // Or fetch it from a database or other source
-}
+};

@@ -291,9 +291,8 @@ async function getBotMessage(userMessage) {
       "Content-Type": "application/json"
     },
     body: JSON.stringify({
-      userMessage,
-      botName: selectedBot.name,
-      botType: selectedBot.type
+      userMessage: userMessage,
+      selectedBot: selectedBot
     })
   };
 
