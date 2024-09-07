@@ -1,14 +1,3 @@
-// Function to get a bot's personality based on selected bot type and name
-function getBotPersonality(selectedBotType, selectedBotName) {
-  const botCategories = getBotCategories();
-  const botCategory = botCategories[selectedBotType];
-  if (botCategory) {
-    const selectedBot = botCategory.find((bot) => bot.name === selectedBotName);
-    return selectedBot ? selectedBot.personality : "";
-  }
-  return "";
-}
-
 // Function to speak the bot's message using the assigned voice
 function speakBotMessage(message) {
   // Ensure voices are loaded
@@ -290,7 +279,6 @@ function getBotPersonality(selectedBotType, selectedBotName) {
 }
 
 // Function to get the bot's message using the selected bot's personality
-
 async function getBotMessage(userMessage) {
   if (!selectedBot.name || !selectedBot.type) {
     return "No bot selected. Please select a bot before sending a message.";
@@ -305,7 +293,7 @@ async function getBotMessage(userMessage) {
       userMessage: userMessage,
       selectedBot: {
         name: selectedBot.name,
-        personality: getBotPersonality(selectedBot.type, selectedBot.name) // This function should be on the frontend
+        personality: getBotPersonality(selectedBot.type, selectedBot.name)
       }
     })
   };

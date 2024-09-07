@@ -5,8 +5,6 @@ exports.handler = async (event) => {
   const apiUrl =
     "https://cheapest-gpt-4-turbo-gpt-4-vision-chatgpt-openai-ai-api.p.rapidapi.com/v1/chat/completions";
 
-  const botPersonality = getBotPersonality(selectedBot.type, selectedBot.name); // Ensure this function is defined in your function
-
   const options = {
     method: "POST",
     headers: {
@@ -19,7 +17,7 @@ exports.handler = async (event) => {
       messages: [
         {
           role: "system",
-          content: `You are a chatbot named ${selectedBot.name}. You have ${botPersonality}`
+          content: `You are a chatbot named ${selectedBot.name}. You have ${selectedBot.personality}`
         },
         {
           role: "user",
