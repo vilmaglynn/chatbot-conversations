@@ -292,7 +292,10 @@ async function getBotMessage(userMessage) {
     },
     body: JSON.stringify({
       userMessage: userMessage,
-      selectedBot: selectedBot
+      selectedBot: {
+        name: selectedBot.name,
+        personality: getBotPersonality(selectedBot.type, selectedBot.name) // This function should be on the frontend
+      }
     })
   };
 
