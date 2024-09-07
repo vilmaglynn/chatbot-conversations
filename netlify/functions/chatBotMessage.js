@@ -1,5 +1,19 @@
+// Export handler function for Netlify function
 exports.handler = async (event) => {
   const { userMessage, selectedBot } = JSON.parse(event.body);
+
+  if (!userMessage || !selectedBot) {
+    return {
+      statusCode: 400,
+      body: JSON.stringify({ error: "Invalid input" }),
+      headers: {
+        "Access-Control-Allow-Origin": "*", // Allow all origins
+        "Access-Control-Allow-Methods": "OPTIONS, POST, GET",
+        "Access-Control-Allow-Headers": "Content-Type"
+      }
+    };
+  }
+
   const apiUrl =
     "https://cheapest-gpt-4-turbo-gpt-4-vision-chatgpt-openai-ai-api.p.rapidapi.com/v1/chat/completions";
 

@@ -284,28 +284,40 @@ async function getBotMessage(userMessage) {
     return "No bot selected. Please select a bot before sending a message.";
   }
 
+  const botPersonality = getBotPersonality(selectedBot.type, selectedBot.name);
   const options = {
     method: "POST",
     headers: {
+      "x-rapidapi-key": API_KEY,
+      "x-rapidapi-host":
+        "cheapest-gpt-4-turbo-gpt-4-vision-chatgpt-openai-ai-api.p.rapidapi.com",
       "Content-Type": "application/json"
     },
     body: JSON.stringify({
-      userMessage: userMessage,
-      selectedBot: {
-        name: selectedBot.name,
-        personality: getBotPersonality(selectedBot.type, selectedBot.name)
-      }
+      messages: [
+        {
+          role: "system",
+          content: `You are a chatbot named ${selectedBot.name}. You have ${botPersonality}`
+        },
+        {
+          role: "user",
+          content: userMessage
+        }
+      ],
+      model: "gpt-4o",
+      max_tokens: 100,
+      temperature: 0.9
     })
   };
 
   try {
-    const response = await fetch("/.netlify/functions/chatBotMessage", options);
+    const response = await fetch(apiUrl, options);
     if (!response.ok) {
       console.error("Response error:", await response.text());
       return `Error: ${response.status} ${response.statusText}`;
     }
     const result = await response.json();
-    return result.message;
+    return result.choices[0].message.content;
   } catch (error) {
     console.error("Failed to get bot message:", error);
     return "Sorry, something went wrong. Please try again.";
