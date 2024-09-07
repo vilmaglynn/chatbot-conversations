@@ -279,35 +279,30 @@ function getBotPersonality(selectedBotType, selectedBotName) {
 }
 
 // Function to get the bot's message using the selected bot's personality
-const apiUrl = "/api/chatBotMessage";
 
 async function getBotMessage(userMessage) {
   if (!selectedBot.name || !selectedBot.type) {
     return "No bot selected. Please select a bot before sending a message.";
   }
 
-  const botPersonality = getBotPersonality(selectedBot.type, selectedBot.name);
   const options = {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers: {
+      "Content-Type": "application/json"
+    },
     body: JSON.stringify({
-      messages: [
-        {
-          role: "system",
-          content: `You are a chatbot named ${selectedBot.name}. You have ${botPersonality}`
-        },
-        { role: "user", content: userMessage }
-      ]
+      userMessage,
+      botName: selectedBot.name,
+      botType: selectedBot.type
     })
   };
 
   try {
-    const response = await fetch(apiUrl, options);
-
+    const response = await fetch("/.netlify/functions/chatBotMessage", options);
     if (!response.ok) {
-      throw new Error("Network response was not ok");
+      console.error("Response error:", await response.text());
+      return `Error: ${response.status} ${response.statusText}`;
     }
-
     const result = await response.json();
     return result.message;
   } catch (error) {
