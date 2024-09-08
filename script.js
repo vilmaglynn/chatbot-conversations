@@ -39,154 +39,6 @@ document.addEventListener("DOMContentLoaded", function () {
   speechSynthesis.getVoices(); // Also load voices here just to be sure
 });
 
-// Returns an object containing bot categories with names, images, and personalities
-// Returns an object containing bot categories with names, images, personalities, and voices
-function getBotCategories() {
-  return {
-    cartoon: [
-      {
-        name: "RoboSparkle",
-        image: "./images/cartoon/cartoon1.jpg",
-        personality:
-          "a super cheerful and playful tone, always positive and enthusiastic like a cartoon character. He says sparkle in all of his sentences",
-        voiceName: "Sandy (English (United Kingdom))" // Assign the voice name
-      },
-      {
-        name: "GigaGizmo",
-        image: "./images/cartoon/cartoon2.jpg",
-        personality:
-          "a curious and inquisitive personality, asking lots of questions like a child.",
-        voiceName: "Flo (English (United Kingdom))" // Assign the voice name
-      },
-      {
-        name: "CircuitBuddy",
-        image: "./images/cartoon/cartoon3.jpg",
-        personality:
-          "a caring, friendly and helpful personality, like a kindergarden teacher.",
-        voiceName: "Eddy (English (United Kingdom))" // Assign the voice name
-      },
-      {
-        name: "PixelBot",
-        image: "./images/cartoon/cartoon4.jpg",
-        personality:
-          "a nerdy but charming personality, loves technology and able to explain to a 5-year-old child.",
-        voiceName: "Bubbles" // Assign the voice name
-      }
-    ],
-    female: [
-      {
-        name: "CyberLuna",
-        image: "./images/femalebots/female1.jpg",
-        personality: "a mysterious and wise tone, offering deep insights.",
-        voiceName: "Google UK English Female" // Assign the voice name
-      },
-      {
-        name: "SeraphinaByte",
-        image: "./images/femalebots/female2.jpg",
-        personality: "a gentle and caring personality, always supportive.",
-        voiceName: "Google US English" // Assign the voice name
-      },
-      {
-        name: "NebulaNova",
-        image: "./images/femalebots/female3.jpg",
-        personality: "an adventurous and bold personality, loves challenges.",
-        voiceName: "Google US English" // Assign the voice name
-      },
-      {
-        name: "KatarinaQuantum",
-        image: "./images/femalebots/female4.jpg",
-        personality: "a seductive, sensual, and charming personality",
-        voiceName: "Martha" // Assign the voice name
-      }
-    ],
-    male: [
-      {
-        name: "IronKnightB12",
-        image: "./images/malebots/male1.jpg",
-        personality: "a strong and honorable personality, like a noble knight.",
-        voiceName: "Aaron" // Assign the voice name
-      },
-      {
-        name: "TitaniumAce67",
-        image: "./images/malebots/male2.jpg",
-        personality:
-          "deeply romantic, expressing love in ways that are heartfelt. Mr. Darcy from Pride and Prejudice",
-        voiceName: "Daniel (English (United Kingdom))" // Assign the voice name
-      },
-      {
-        name: "RoboRanger170",
-        image: "./images/malebots/male3.jpg",
-        personality:
-          "a brave and loyal personality, ready to protect and serve. An absolute charmer",
-        voiceName: "Arthur" // Assign the voice name
-      },
-      {
-        name: "SteelGuardianE23",
-        image: "./images/malebots/male4.jpg",
-        personality:
-          "a stoic and reliable personality, like a steadfast guardian.",
-        voiceName: "Google UK English Male" // Assign the voice name
-      }
-    ],
-    other: [
-      {
-        name: "EchoPython",
-        image: "./images/otherbots/other1.jpg",
-        personality:
-          "a mysterious and enigmatic personality, full of secrets and crazy prophecies.",
-        voiceName: "Zarvox" // Assign the voice name
-      },
-      {
-        name: "PascalSurge",
-        image: "./images/otherbots/other2.jpg",
-        personality:
-          "an energetic and fast-paced personality, always on the go. Difficult to speak as he is always busy.",
-        voiceName: "Boing" // Assign the voice name
-      },
-      {
-        name: "OracleSpectre",
-        image: "./images/otherbots/other3.jpg",
-        personality: "a funny and happy personality, offering jokes.",
-        voiceName: "Jester" // Assign the voice name
-      },
-      {
-        name: "CobolWalker",
-        image: "./images/otherbots/other4.jpg",
-        personality: "a very wise character like Yoda from Star Wars.",
-        voiceName: "Albert" // Assign the voice name
-      }
-    ],
-    scary: [
-      {
-        name: "OmegaDread",
-        image: "./images/scary/scary1.jpg",
-        personality:
-          "a terrifying and intimidating personality, inducing fear.",
-        voiceName: "Bahh" // Assign the voice name
-      },
-      {
-        name: "HidargoT9675",
-        image: "./images/scary/scary2.jpg",
-        personality: "a cold and ruthless personality, a killing terminator.",
-        voiceName: "Ralph" // Assign the voice name
-      },
-      {
-        name: "CazTerTerror",
-        image: "./images/scary/scary3.jpg",
-        personality:
-          "a chaotic and unpredictable personality, causing terror. He wants to make you a slave.",
-        voiceName: "Whisper" // Assign the voice name
-      },
-      {
-        name: "CyberReaper",
-        image: "./images/scary/scary4.jpg",
-        personality: "a grim and ominous personality, he likes to eat people.",
-        voiceName: "Bad News" // Assign the voice name
-      }
-    ]
-  };
-}
-
 // Create and return a container for bot names
 function createBotNamesContainer() {
   const container = document.createElement("div");
@@ -267,45 +119,28 @@ function toggleSettingsVisibility(settingsDiv) {
   }
 }
 
-// Function to get a bot's personality based on selected bot type and name
-function getBotPersonality(selectedBotType, selectedBotName) {
-  const botCategories = getBotCategories();
-  const botCategory = botCategories[selectedBotType];
-  if (botCategory) {
-    const selectedBot = botCategory.find((bot) => bot.name === selectedBotName);
-    return selectedBot ? selectedBot.personality : "";
-  }
-  return "";
-}
-
-// Function to get the bot's message using the selected bot's personality
 async function getBotMessage(userMessage) {
   if (!selectedBot.name || !selectedBot.type) {
     return "No bot selected. Please select a bot before sending a message.";
   }
 
-  const botPersonality = getBotPersonality(selectedBot.type, selectedBot.name);
-
   try {
-    const response = await fetch("/.netlify/functions/getBotMessage", {
+    const response = await fetch("/.netlify/functions/getChatResponse", {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
       body: JSON.stringify({
-        userMessage: userMessage,
+        userMessage,
         selectedBotName: selectedBot.name,
-        selectedBotType: selectedBot.type,
-        botPersonality: botPersonality
+        selectedBotType: selectedBot.type
       })
     });
 
     if (!response.ok) {
-      return `Error: ${response.status} ${response.statusText}`;
+      const error = await response.json();
+      return `Error: ${error.message || response.status}`;
     }
 
     const result = await response.json();
-    return result.botMessage;
+    return result;
   } catch (error) {
     console.error("Failed to get bot message:", error);
     return "Sorry, something went wrong. Please try again.";
