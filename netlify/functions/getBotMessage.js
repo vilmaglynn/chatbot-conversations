@@ -1,7 +1,7 @@
 const fetch = require("node-fetch"); // Ensure node-fetch is installed
 
 // Import the botCategories from the correct path
-const { botCategories } = require("../path/to/script.js"); // Adjust the path accordingly
+const { botCategories } = require("/script.js"); // Adjust the path accordingly
 
 exports.handler = async (event) => {
   if (event.httpMethod !== "POST") {

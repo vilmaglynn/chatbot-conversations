@@ -39,95 +39,7 @@ document.addEventListener("DOMContentLoaded", function () {
   speechSynthesis.getVoices(); // Also load voices here just to be sure
 });
 
-// Create and return a container for bot names
-function createBotNamesContainer() {
-  const container = document.createElement("div");
-  document.getElementById("settingsHide").appendChild(container);
-  return container;
-}
-
-// Function to initialize bot selection
-function initializeBotSelection() {
-  const botCategories = getBotCategories();
-  const typeRadios = document.querySelectorAll('input[name="image"]');
-  const botNamesContainer = createBotNamesContainer();
-
-  typeRadios.forEach((radio) => {
-    radio.addEventListener("change", function () {
-      const selectedCategory = botCategories[radio.value];
-      if (selectedCategory) {
-        displayBotNames(selectedCategory, botNamesContainer, radio.value); // Pass the type
-      }
-    });
-  });
-}
-
-// Function to initialize background change functionality
-function initializeBackgroundChange() {
-  const images = [
-    "./images/backgrounds/background-blue1.jpg",
-    "./images/backgrounds/background-blue2.jpg",
-    "./images/backgrounds/background-blue3.jpg",
-    "./images/backgrounds/background-red1.jpg",
-    "./images/backgrounds/background-red2.jpg",
-    "./images/backgrounds/background-red3.jpg",
-    "./images/backgrounds/background-white1.jpg",
-    "./images/backgrounds/background-white2.jpg",
-    "./images/backgrounds/background-green1.jpg"
-  ];
-
-  let currentIndex = 0;
-  const backgroundButton = document.getElementById("backgroundButton");
-
-  backgroundButton.addEventListener("click", function (event) {
-    event.preventDefault();
-    changeBackground(images, currentIndex);
-    currentIndex = (currentIndex + 1) % images.length;
-  });
-}
-
-// Function to change background image
-function changeBackground(images, currentIndex) {
-  const selectedImage = images[currentIndex];
-  document.body.style.backgroundImage = `url('${selectedImage}')`;
-  document.body.style.backgroundRepeat = "no-repeat";
-  document.body.style.backgroundPosition = "center";
-  document.body.style.backgroundSize = "cover";
-}
-
-// Function to initialize settings toggle
-function initializeSettingsToggle() {
-  const toggleButton = document.getElementById("toggleSettingsButton");
-  const settingsDiv = document.getElementById("settingsHide");
-
-  toggleButton.addEventListener("click", function (event) {
-    event.preventDefault();
-    toggleSettingsVisibility(settingsDiv);
-  });
-
-  settingsDiv.classList.add("hidden");
-}
-
-// Function to toggle settings visibility
-function toggleSettingsVisibility(settingsDiv) {
-  if (settingsDiv.classList.contains("hidden")) {
-    settingsDiv.classList.remove("hidden");
-    settingsDiv.classList.add("visible");
-  } else {
-    settingsDiv.classList.remove("visible");
-    settingsDiv.classList.add("hidden");
-  }
-}
-
-// Helper function to get bot personality
-function getBotPersonality(selectedBotType, selectedBotName) {
-  const botCategories = getBotCategories();
-  const botCategory = botCategories[selectedBotType];
-  const selectedBot = botCategory.find((bot) => bot.name === selectedBotName);
-  return selectedBot ? selectedBot.personality : "";
-}
-
-// Include your getBotCategories function here
+// Returns an object containing bot categories with names, images, and personalities
 // Returns an object containing bot categories with names, images, personalities, and voices
 function getBotCategories() {
   return {
@@ -275,41 +187,153 @@ function getBotCategories() {
   };
 }
 
-const apiUrl = "/.netlify/functions/getBotMessage";
+// Create and return a container for bot names
+function createBotNamesContainer() {
+  const container = document.createElement("div");
+  document.getElementById("settingsHide").appendChild(container);
+  return container;
+}
 
+// Function to initialize bot selection
+function initializeBotSelection() {
+  const botCategories = getBotCategories();
+  const typeRadios = document.querySelectorAll('input[name="image"]');
+  const botNamesContainer = createBotNamesContainer();
+
+  typeRadios.forEach((radio) => {
+    radio.addEventListener("change", function () {
+      const selectedCategory = botCategories[radio.value];
+      if (selectedCategory) {
+        displayBotNames(selectedCategory, botNamesContainer, radio.value); // Pass the type
+      }
+    });
+  });
+}
+
+// Function to initialize background change functionality
+function initializeBackgroundChange() {
+  const images = [
+    "./images/backgrounds/background-blue1.jpg",
+    "./images/backgrounds/background-blue2.jpg",
+    "./images/backgrounds/background-blue3.jpg",
+    "./images/backgrounds/background-red1.jpg",
+    "./images/backgrounds/background-red2.jpg",
+    "./images/backgrounds/background-red3.jpg",
+    "./images/backgrounds/background-white1.jpg",
+    "./images/backgrounds/background-white2.jpg",
+    "./images/backgrounds/background-green1.jpg"
+  ];
+
+  let currentIndex = 0;
+  const backgroundButton = document.getElementById("backgroundButton");
+
+  backgroundButton.addEventListener("click", function (event) {
+    event.preventDefault();
+    changeBackground(images, currentIndex);
+    currentIndex = (currentIndex + 1) % images.length;
+  });
+}
+
+// Function to change background image
+function changeBackground(images, currentIndex) {
+  const selectedImage = images[currentIndex];
+  document.body.style.backgroundImage = `url('${selectedImage}')`;
+  document.body.style.backgroundRepeat = "no-repeat";
+  document.body.style.backgroundPosition = "center";
+  document.body.style.backgroundSize = "cover";
+}
+
+// Function to initialize settings toggle
+function initializeSettingsToggle() {
+  const toggleButton = document.getElementById("toggleSettingsButton");
+  const settingsDiv = document.getElementById("settingsHide");
+
+  toggleButton.addEventListener("click", function (event) {
+    event.preventDefault();
+    toggleSettingsVisibility(settingsDiv);
+  });
+
+  settingsDiv.classList.add("hidden");
+}
+
+// Function to toggle settings visibility
+function toggleSettingsVisibility(settingsDiv) {
+  if (settingsDiv.classList.contains("hidden")) {
+    settingsDiv.classList.remove("hidden");
+    settingsDiv.classList.add("visible");
+  } else {
+    settingsDiv.classList.remove("visible");
+    settingsDiv.classList.add("hidden");
+  }
+}
+
+const apiUrl =
+  "https://cheapest-gpt-4-turbo-gpt-4-vision-chatgpt-openai-ai-api.p.rapidapi.com/v1/chat/completions";
+const API_KEY = "1dc16be9ccmsh6df3721a5f10d2ap1f1670jsn2d50fb26ca53"; // Replace with your API key
+
+// Function to get a bot's personality based on selected bot type and name
+function getBotPersonality(selectedBotType, selectedBotName) {
+  const botCategories = getBotCategories();
+  const botCategory = botCategories[selectedBotType];
+  if (botCategory) {
+    const selectedBot = botCategory.find((bot) => bot.name === selectedBotName);
+    return selectedBot ? selectedBot.personality : "";
+  }
+  return "";
+}
+
+// Function to get the bot's message using the selected bot's personality
 async function getBotMessage(userMessage) {
   if (!selectedBot.name || !selectedBot.type) {
     return "No bot selected. Please select a bot before sending a message.";
   }
 
+  const botPersonality = getBotPersonality(selectedBot.type, selectedBot.name);
+  const options = {
+    method: "POST",
+    headers: {
+      "x-rapidapi-key": API_KEY,
+      "x-rapidapi-host":
+        "cheapest-gpt-4-turbo-gpt-4-vision-chatgpt-openai-ai-api.p.rapidapi.com",
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      messages: [
+        {
+          role: "system",
+          content: `You are a chatbot named ${selectedBot.name}. You have ${botPersonality}`
+        },
+        {
+          role: "user",
+          content: userMessage
+        }
+      ],
+      model: "gpt-4o",
+      max_tokens: 100,
+      temperature: 0.9
+    })
+  };
+
   try {
-    const response = await fetch(apiUrl, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        userMessage,
-        selectedBotName: selectedBot.name,
-        selectedBotType: selectedBot.type
-      })
-    });
+    const response = await fetch(apiUrl, options);
+
+    // Handle error 429 (Too Many Requests)
+    if (response.status === 429) {
+      return "Error 429 - You have asked too many questions. Come back next month.";
+    }
 
     if (!response.ok) {
-      const errorText = await response.text();
-      console.error("Fetch error:", errorText);
-      return `Error: ${errorText}`;
+      console.error("Response error:", await response.text());
+      return `Error: ${response.status} ${response.statusText}`;
     }
 
     const result = await response.json();
-    return result;
+    return result.choices[0].message.content;
   } catch (error) {
-    console.error("Fetch error:", error);
-    return `Error: ${error.message}`;
+    console.error("Failed to get bot message:", error);
+    return "Sorry, something went wrong. Please try again.";
   }
 }
-
-// Other existing functions and code
 
 function speakBotMessage(message) {
   // Ensure voices are loaded
