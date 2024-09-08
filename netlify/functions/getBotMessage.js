@@ -1,4 +1,7 @@
-const fetch = require("node-fetch"); // Make sure to install node-fetch if you haven't
+const fetch = require("node-fetch"); // Ensure node-fetch is installed
+
+// Import the botCategories from the correct path
+const { botCategories } = require("../path/to/script.js"); // Adjust the path accordingly
 
 exports.handler = async (event) => {
   if (event.httpMethod !== "POST") {
@@ -19,11 +22,14 @@ exports.handler = async (event) => {
     };
   }
 
-  const botCategories = {
-    // Your bot categories definition
-  };
-
   const botCategory = botCategories[selectedBotType];
+  if (!botCategory) {
+    return {
+      statusCode: 404,
+      body: JSON.stringify({ error: "Bot Category Not Found" })
+    };
+  }
+
   const selectedBot = botCategory.find((bot) => bot.name === selectedBotName);
   const botPersonality = selectedBot ? selectedBot.personality : "";
 
