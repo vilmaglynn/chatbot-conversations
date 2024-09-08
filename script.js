@@ -282,25 +282,31 @@ async function getBotMessage(userMessage) {
     return "No bot selected. Please select a bot before sending a message.";
   }
 
-  const response = await fetch(apiUrl, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify({
-      userMessage,
-      selectedBotName: selectedBot.name,
-      selectedBotType: selectedBot.type
-    })
-  });
+  try {
+    const response = await fetch(apiUrl, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        userMessage,
+        selectedBotName: selectedBot.name,
+        selectedBotType: selectedBot.type
+      })
+    });
 
-  if (!response.ok) {
-    const error = await response.json();
-    return `Error: ${error.error}`;
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error("Fetch error:", errorText);
+      return `Error: ${errorText}`;
+    }
+
+    const result = await response.json();
+    return result;
+  } catch (error) {
+    console.error("Fetch error:", error);
+    return `Error: ${error.message}`;
   }
-
-  const result = await response.json();
-  return result;
 }
 
 // Other existing functions and code
