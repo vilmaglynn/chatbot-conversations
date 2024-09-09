@@ -20,6 +20,7 @@ function speakBotMessage(message) {
     speechSynthesis.speak(utterance);
   } else {
     console.error("Voice not found:", voiceName);
+    utterance.voice = speechSynthesis.getVoices()[0]; // Fallback to default voice
   }
 }
 
