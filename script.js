@@ -1,28 +1,84 @@
 // Function to speak the bot's message using the assigned voice
+// Function to speak the bot's message using the assigned voice
 function speakBotMessage(message) {
-  // Ensure voices are loaded
+  // Get available voices
   const voices = speechSynthesis.getVoices();
 
+  // If voices are not yet loaded in Safari, warn the user and return
+  if (!voices.length) {
+    console.warn("Voices are not loaded yet. Trying again...");
+    return; // Prevent further execution until voices are loaded
+  }
+
+  // Retrieve bot categories and selected bot data
   const botCategories = getBotCategories();
   const botCategory = botCategories[selectedBot.type];
   const selectedBotData = botCategory.find(
     (bot) => bot.name === selectedBot.name
   );
-  const voiceName = selectedBotData.voiceName;
 
-  const selectedVoice = voices.find((voice) => voice.name === voiceName);
+  // Get voice names for the selected bot
+  const voiceNames = Array.isArray(selectedBotData.voiceName)
+    ? selectedBotData.voiceName
+    : [selectedBotData.voiceName];
 
-  if (selectedVoice) {
-    const utterance = new SpeechSynthesisUtterance(message);
-    utterance.voice = selectedVoice;
-    utterance.rate = 0.9; // Adjust speed if needed
-    utterance.pitch = 1; // Adjust pitch if needed
-    speechSynthesis.speak(utterance);
-  } else {
-    console.error("Voice not found:", voiceName);
-    utterance.voice = speechSynthesis.getVoices()[0]; // Fallback to default voice
+  // Find the matching voice
+  let selectedVoice = null;
+  for (let voiceName of voiceNames) {
+    selectedVoice = voices.find((voice) => voice.name === voiceName);
+    if (selectedVoice) break;
   }
+
+  // Create the speech synthesis utterance
+  const utterance = new SpeechSynthesisUtterance(message);
+  if (selectedVoice) {
+    utterance.voice = selectedVoice;
+  } else {
+    console.error("No matching voice found. Using default voice.");
+    utterance.voice = voices[0]; // Fallback to the first available voice
+  }
+
+  utterance.rate = 0.9; // Adjust speed if needed
+  utterance.pitch = 1; // Adjust pitch if needed
+
+  // Speak the message
+  speechSynthesis.speak(utterance);
 }
+
+// Ensure voices are loaded in Safari by listening for the voiceschanged event
+speechSynthesis.addEventListener("voiceschanged", () => {
+  console.log("Voices loaded successfully.");
+  speakBotMessage("Voices are ready!");
+});
+
+// Load voices immediately on page load
+window.addEventListener("load", () => {
+  if (!speechSynthesis.getVoices().length) {
+    speechSynthesis.addEventListener("voiceschanged", () => {
+      console.log("Voices loaded after page load.");
+    });
+  }
+  // Load voices just in case
+  speechSynthesis.getVoices();
+});
+
+// Other code related to bot initialization, selection, etc.
+
+// Trigger the voiceschanged event to ensure voices are loaded properly in Safari
+speechSynthesis.addEventListener("voiceschanged", () => {
+  console.log("Voices loaded successfully.");
+  speakBotMessage("Voices are ready!");
+});
+
+// Also load voices immediately on page load
+window.addEventListener("load", () => {
+  if (speechSynthesis.getVoices().length === 0) {
+    // Ensure voices load in Safari or other browsers
+    speechSynthesis.addEventListener("voiceschanged", () => {
+      console.log("Voices loaded after page load.");
+    });
+  }
+});
 
 // Trigger the voiceschanged event and cache voices immediately
 window.addEventListener("load", () => {
@@ -50,7 +106,10 @@ function getBotCategories() {
         image: "./images/cartoon/cartoon1.jpg",
         personality:
           "a super cheerful and playful tone, always positive and enthusiastic like a cartoon character. He says sparkle in all of his sentences",
-        voiceName: "Sandy (English (United Kingdom))" // Assign the voice name
+        voiceName: [
+          "Sandy (English (United Kingdom))",
+          "Microsoft Maisie Online (Natural) - English (United Kingdom)"
+        ]
       },
       {
         name: "Giga Gizmo",
@@ -79,25 +138,37 @@ function getBotCategories() {
         name: "Cyber Luna",
         image: "./images/femalebots/female1.jpg",
         personality: "a mysterious and wise tone, offering deep insights.",
-        voiceName: "Google UK English Female" // Assign the voice name
+        voiceName: [
+          "Google UK English Female",
+          "Microsoft Libby Online (Natural) - English (United Kingdom)"
+        ] // Assign the voice name
       },
       {
         name: "Seraphina Byte",
         image: "./images/femalebots/female2.jpg",
         personality: "a gentle and caring personality, always supportive.",
-        voiceName: "Google US English" // Assign the voice name
+        voiceName: [
+          "Google US English",
+          "Microsoft Sonia Online (Natural) - English (United Kingdom)"
+        ] // Assign the voice name
       },
       {
         name: "Nebula Nova",
         image: "./images/femalebots/female3.jpg",
         personality: "an adventurous and bold personality, loves challenges.",
-        voiceName: "Google US English" // Assign the voice name
+        voiceName: [
+          "Google US English",
+          "Microsoft Sonia Online (Natural) - English (United Kingdom)"
+        ] // Assign the voice name
       },
       {
         name: "Katarina Quantum",
         image: "./images/femalebots/female4.jpg",
         personality: "a seductive, sensual, and charming personality",
-        voiceName: "Martha" // Assign the voice name
+        voiceName: [
+          "Martha",
+          "Microsoft Michelle Online (Natural) - English (United States)"
+        ] // Assign the voice name
       }
     ],
     male: [
@@ -105,7 +176,10 @@ function getBotCategories() {
         name: "Iron KnightB12",
         image: "./images/malebots/male1.jpg",
         personality: "a strong and honorable personality, like a noble knight.",
-        voiceName: "Aaron" // Assign the voice name
+        voiceName: [
+          "Aaron",
+          "Microsoft Ryan Online (Natural) - English (United Kingdom)"
+        ] // Assign the voice name
       },
       {
         name: "Titanium Ace67",
@@ -126,7 +200,10 @@ function getBotCategories() {
         image: "./images/malebots/male4.jpg",
         personality:
           "a stoic and reliable personality, like a steadfast guardian. he will protect you from killing robots",
-        voiceName: "Google UK English Male" // Assign the voice name
+        voiceName: [
+          "Google UK English Male",
+          "Microsoft Thomas Online (Natural) - English (United Kingdom)"
+        ] // Assign the voice name
       }
     ],
     other: [
@@ -488,24 +565,6 @@ function displayUserMessage(message, chatContainer) {
   chatContainer.appendChild(newMessage);
 }
 
-// function displayBotMessage(message, chatContainer) {
-//   let newMessage = document.createElement("p");
-
-//   let botLabel = document.createElement("span");
-//   botLabel.className = "bot-label";
-
-//   // Use the bot's name dynamically
-//   botLabel.textContent = `${selectedBot.name}: `;
-
-//   let messageContent = document.createElement("span");
-//   messageContent.className = "bot-message";
-//   messageContent.textContent = message;
-
-//   newMessage.appendChild(botLabel);
-//   newMessage.appendChild(messageContent);
-//   chatContainer.appendChild(newMessage);
-// }
-
 let selectedBot = { name: "", type: "" };
 
 function displayBotNames(bots, container, type) {
@@ -606,15 +665,50 @@ function displayBotMessage(message, chatContainer) {
   speakBotMessage(message);
 }
 
-// Ensure the voices are loaded
 speechSynthesis.onvoiceschanged = function () {
   const voices = speechSynthesis.getVoices();
+  const voiceListDiv = document.getElementById("voiceList");
+
+  // Clear any previous buttons (in case voices are reloaded)
+  voiceListDiv.innerHTML = "";
+
   voices.forEach((voice, index) => {
-    console.log(
-      `${index + 1}: Name: ${voice.name}, Lang: ${voice.lang}, URI: ${
-        voice.voiceURI
-      }`
-    );
+    // Create a container for each voice
+    const voiceContainer = document.createElement("div");
+    voiceContainer.style.marginBottom = "10px";
+
+    // Create a button to play the voice
+    const playButton = document.createElement("button");
+    playButton.innerText = `${index + 1}: ${voice.name} (${voice.lang})`;
+    playButton.onclick = () => {
+      const utterance = new SpeechSynthesisUtterance(
+        `This is a sample sentence using the ${voice.name} voice`
+      );
+      utterance.voice = voice;
+      speechSynthesis.speak(utterance);
+    };
+
+    // Create a button to copy the voice name
+    const copyButton = document.createElement("button");
+    copyButton.innerText = "Copy Voice Name";
+    copyButton.className = "copy-button";
+    copyButton.onclick = () => {
+      navigator.clipboard
+        .writeText(voice.name)
+        .then(() => {
+          alert("Voice name copied to clipboard!");
+        })
+        .catch((err) => {
+          console.error("Failed to copy: ", err);
+        });
+    };
+
+    // Append buttons to the container
+    voiceContainer.appendChild(playButton);
+    voiceContainer.appendChild(copyButton);
+
+    // Append the container to the list
+    voiceListDiv.appendChild(voiceContainer);
   });
 };
 
