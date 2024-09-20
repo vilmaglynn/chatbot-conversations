@@ -1,15 +1,13 @@
 // Function to speak the bot's message using the assigned voice
 // Function to speak the bot's message using the assigned voice
-// Function to speak the bot's message using the assigned voice
 function speakBotMessage(message) {
-  // Check if voice is enabled
   const isVoiceEnabled = document.getElementById("tickVoice").checked;
 
   if (!isVoiceEnabled) {
-    return; // Exit the function if voice is disabled
+    return; // Exit if voice is disabled
   }
 
-  // Ensure voices are loaded
+  // Load voices
   const voices = speechSynthesis.getVoices();
 
   const botCategories = getBotCategories();
@@ -17,20 +15,20 @@ function speakBotMessage(message) {
   const selectedBotData = botCategory.find(
     (bot) => bot.name === selectedBot.name
   );
-  const voiceNames = selectedBotData.voiceName; // Assume this is an array
-  const botGender = selectedBotData.gender; // Get the bot's gender
+  const voiceNames = selectedBotData.voiceName; // Array of voice names
+  const botGender = selectedBotData.gender; // Bot gender
 
   let selectedVoice = null;
 
-  // Step 1: Try to find a voice that matches one of the bot's voice names and is in English
+  // Step 1: Try to match one of the bot's voice names in English
   for (let voiceName of voiceNames) {
-    selectedVoice = voices.find((voice) => {
-      return voice.name === voiceName && voice.lang.startsWith("en"); // Match voice name and check if the lang starts with 'en'
-    });
-    if (selectedVoice) break; // Stop searching once a match is found
+    selectedVoice = voices.find(
+      (voice) => voice.name === voiceName && voice.lang.startsWith("en")
+    );
+    if (selectedVoice) break;
   }
 
-  // Step 2: If no voice by name is found, find a voice based on the bot's gender and is English
+  // Step 2: If no exact match, try to find an English voice based on gender
   if (!selectedVoice) {
     selectedVoice = voices.find((voice) => {
       const isEnglish = voice.lang.startsWith("en");
@@ -41,7 +39,7 @@ function speakBotMessage(message) {
     });
   }
 
-  // Step 3: If still no voice is found, fall back to any available English voice
+  // Step 3: Final fallback to any English voice
   if (!selectedVoice) {
     selectedVoice = voices.find((voice) => voice.lang.startsWith("en"));
   }
@@ -55,13 +53,12 @@ function speakBotMessage(message) {
     // Start sound wave animation
     const soundWaveBars = document.querySelectorAll(".sound-wave-bar");
     soundWaveBars.forEach((bar) => {
-      bar.style.animationPlayState = "running"; // Start the animation
+      bar.style.animationPlayState = "running"; // Start animation
     });
 
     utterance.onend = function () {
-      // Stop sound wave animation when speaking ends
       soundWaveBars.forEach((bar) => {
-        bar.style.animationPlayState = "paused"; // Pause the animation
+        bar.style.animationPlayState = "paused"; // Stop animation
       });
     };
 
@@ -70,6 +67,20 @@ function speakBotMessage(message) {
     console.error("No suitable voice found for:", voiceNames);
   }
 }
+
+// Ensure voices are loaded
+window.addEventListener("voiceschanged", () => {
+  speechSynthesis.getVoices(); // Trigger voice loading
+});
+
+document.addEventListener("DOMContentLoaded", function () {
+  initializeBotSelection();
+  initializeVoiceRecognition();
+  initializeBackgroundChange();
+  initializeSettingsToggle();
+  deleteMsgAction();
+  speechSynthesis.getVoices(); // Also load voices to ensure availability
+});
 
 // Trigger the voiceschanged event and cache voices immediately
 
@@ -317,7 +328,7 @@ function getBotCategories() {
           "a mysterious and enigmatic personality, full of secrets and crazy prophecies. He will tell you real prophecies",
         voiceName: [
           "Zarvox",
-          "Microsoft BrianMultilingual Online (Natural) - English (United States)"
+          "Microsoft Ryan Online (Natural) - English (United Kingdom)"
         ],
         gender: "male"
       },
@@ -328,7 +339,7 @@ function getBotCategories() {
           "an energetic and fast-paced personality, always on the go. Difficult to speak as he is always busy. He doesn't want to speak",
         voiceName: [
           "Boing",
-          "Microsoft BrianMultilingual Online (Natural) - English (United States)"
+          "Microsoft Ryan Online (Natural) - English (United Kingdom)"
         ],
         gender: "male"
       },
@@ -338,7 +349,7 @@ function getBotCategories() {
         personality: "a funny and happy personality, offering jokes.",
         voiceName: [
           "Jester",
-          "Microsoft Carlos Online (Natural) - Spanish (Honduras)"
+          "Microsoft Ryan Online (Natural) - English (United Kingdom)"
         ],
         gender: "male"
       },
@@ -357,7 +368,10 @@ function getBotCategories() {
         image: "./images/scary/scary1.jpg",
         personality:
           "a terrifying and intimidating personality, inducing fear. He will scare you",
-        voiceName: ["Bahh"],
+        voiceName: [
+          "Bahh",
+          "Microsoft Christopher Online (Natural) - English (United States)"
+        ],
         gender: "male"
       },
       {
@@ -365,7 +379,10 @@ function getBotCategories() {
         image: "./images/scary/scary2.jpg",
         personality:
           "a cold and ruthless personality, a killing terminator. He wants to kill you",
-        voiceName: ["Ralph"],
+        voiceName: [
+          "Ralph",
+          "Microsoft Christopher Online (Natural) - English (United States)"
+        ],
         gender: "male"
       },
       {
@@ -373,14 +390,20 @@ function getBotCategories() {
         image: "./images/scary/scary3.jpg",
         personality:
           "a chaotic and unpredictable personality, causing terror. He wants to make you his slave.",
-        voiceName: ["Whisper"],
+        voiceName: [
+          "Whisper",
+          "Microsoft Christopher Online (Natural) - English (United States)"
+        ],
         gender: "male"
       },
       {
         name: "Cyber Reaper",
         image: "./images/scary/scary4.jpg",
         personality: "a grim and ominous personality, he likes to eat people.",
-        voiceName: ["Bad News"],
+        voiceName: [
+          "Bad News",
+          "Microsoft Christopher Online (Natural) - English (United States)"
+        ],
         gender: "male"
       }
     ]
