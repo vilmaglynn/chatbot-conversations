@@ -435,3 +435,30 @@ body {
   padding: 5px;
   font-size: 14px;
 }
+
+/* ==================== */
+/* Toggle Voice Container */
+.enableSpeech {
+  display: flex;
+  align-items: center;
+  font-family: Arial, sans-serif;
+  font-size: 16px;
+  margin: 10px;
+}
+
+.enableSpeech label {
+  margin-right: 10px;
+  color: rgb(255, 247, 0); /* Color for "You:" label */
+  font-weight: bold;
+}
+
+.enableSpeech input[type="checkbox"] {
+  width: 30px;
+  height: 30px;
+  cursor: pointer;
+  accent-color: rgb(230, 0, 255);
+}
+
+.enableSpeech input[type="checkbox"]:checked {
+  box-shadow: 0 0 5px rgb(128, 2, 142);
+}

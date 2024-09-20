@@ -1,5 +1,13 @@
 // Function to speak the bot's message using the assigned voice
+// Function to speak the bot's message using the assigned voice
 function speakBotMessage(message) {
+  // Check if voice is enabled
+  const isVoiceEnabled = document.getElementById("tickVoice").checked;
+
+  if (!isVoiceEnabled) {
+    return; // Exit the function if voice is disabled
+  }
+
   // Ensure voices are loaded
   const voices = speechSynthesis.getVoices();
 
@@ -18,6 +26,11 @@ function speakBotMessage(message) {
       return voice.name === voiceName && voice.lang.startsWith("en"); // Match voice name and check if the lang starts with 'en'
     });
     if (selectedVoice) break; // Stop searching once a match is found
+  }
+
+  // If no voice has been selected, pick an English-speaking voice by default
+  if (!selectedVoice) {
+    selectedVoice = voices.find((voice) => voice.lang.startsWith("en"));
   }
 
   if (selectedVoice) {
