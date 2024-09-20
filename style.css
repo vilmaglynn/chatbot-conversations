@@ -20,6 +20,7 @@ body {
   max-width: 600px;
   text-align: left;
   box-shadow: 0 0 20px rgba(0, 255, 255, 0.5);
+  transition: all 0.3s ease; /* Added transition */
 }
 
 #settings h1 {
@@ -112,6 +113,7 @@ body {
   flex-direction: column;
   min-height: 100vh;
   padding: 20px;
+  transition: padding 0.3s ease; /* Added transition */
 }
 
 /* Bot and Chatbox Container */
@@ -127,6 +129,7 @@ body {
   box-shadow: 0 0 20px rgba(0, 255, 255, 0.4);
   backdrop-filter: blur(10px);
   margin-bottom: 30px;
+  transition: all 0.3s ease; /* Added transition */
 }
 
 .botandchat:hover {
@@ -147,6 +150,7 @@ body {
   overflow: hidden;
   position: relative;
   box-shadow: 0 0 15px rgba(0, 255, 255, 0.165);
+  transition: all 0.3s ease; /* Added transition */
 }
 
 #botImage {
@@ -198,10 +202,12 @@ body {
   padding: 10px;
 }
 
+/* Adjust for transitions */
 #mainChatContainerform {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  transition: all 0.3s ease; /* Added transition */
 }
 
 #userMessage {
@@ -235,6 +241,7 @@ body {
   display: flex;
   align-items: center;
   margin-bottom: 10px; /* Space between the textarea + delete and the buttons below */
+  transition: all 0.3s ease; /* Added transition */
 }
 
 #deleteMsg {
@@ -257,6 +264,7 @@ body {
   display: flex;
   justify-content: left;
   column-gap: 5px;
+  transition: all 0.3s ease; /* Added transition */
 }
 
 #voiceInputButton,
@@ -287,6 +295,7 @@ body {
   border: 1px solid #0ff;
   border-radius: 5px;
   box-shadow: 0 0 8px rgba(0, 255, 255, 0.5);
+  transition: all 0.3s ease; /* Added transition */
 }
 
 /* Output Robot Styling */
@@ -298,6 +307,7 @@ body {
   box-shadow: 0 0 10px rgba(0, 255, 255, 0.3);
   padding: 10px;
   overflow-y: auto;
+  transition: all 0.3s ease; /* Added transition */
 }
 
 .botMessage {

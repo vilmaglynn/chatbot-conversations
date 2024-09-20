@@ -255,14 +255,22 @@ function getBotCategories() {
         image: "./images/malebots/male2.jpg",
         personality:
           "romantic, expressing love. Mr. Darcy from Pride and Prejudice. He will seduce you",
-        voiceName: ["Daniel (English (United Kingdom))", "Daniel"]
+        voiceName: [
+          "Daniel (English (United Kingdom))",
+          "Daniel",
+          "Microsoft Thomas Online (Natural) - English (United Kingdom)"
+        ]
       },
       {
         name: "Robo Ranger170",
         image: "./images/malebots/male3.jpg",
         personality:
           "a brave and loyal personality, ready to protect and serve. An absolute charmer",
-        voiceName: ["Arthur", "Fred"]
+        voiceName: [
+          "Arthur",
+          "Fred",
+          "Microsoft Thomas Online (Natural) - English (United Kingdom)"
+        ]
       },
       {
         name: "Steel GuardianE23",
@@ -282,20 +290,29 @@ function getBotCategories() {
         image: "./images/otherbots/other1.jpg",
         personality:
           "a mysterious and enigmatic personality, full of secrets and crazy prophecies. He will tell you real prophecies",
-        voiceName: ["Zarvox"]
+        voiceName: [
+          "Zarvox",
+          "Microsoft BrianMultilingual Online (Natural) - English (United States)"
+        ]
       },
       {
         name: "Pascal Surge",
         image: "./images/otherbots/other2.jpg",
         personality:
           "an energetic and fast-paced personality, always on the go. Difficult to speak as he is always busy. He doesn't want to speak",
-        voiceName: ["Boing"]
+        voiceName: [
+          "Boing",
+          "Microsoft BrianMultilingual Online (Natural) - English (United States)"
+        ]
       },
       {
         name: "Oracle Jester Joker",
         image: "./images/otherbots/other3.jpg",
         personality: "a funny and happy personality, offering jokes.",
-        voiceName: ["Jester"]
+        voiceName: [
+          "Jester",
+          "Microsoft Carlos Online (Natural) - Spanish (Honduras)"
+        ]
       },
       {
         name: "Cobol Yoda Walker",
