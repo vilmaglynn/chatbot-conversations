@@ -1,5 +1,6 @@
 // Function to speak the bot's message using the assigned voice
 // Function to speak the bot's message using the assigned voice
+// Function to speak the bot's message using the assigned voice
 function speakBotMessage(message) {
   // Check if voice is enabled
   const isVoiceEnabled = document.getElementById("tickVoice").checked;
@@ -17,10 +18,11 @@ function speakBotMessage(message) {
     (bot) => bot.name === selectedBot.name
   );
   const voiceNames = selectedBotData.voiceName; // Assume this is an array
+  const botGender = selectedBotData.gender; // Get the bot's gender
 
   let selectedVoice = null;
 
-  // Iterate over the voiceNames array and try to find a match for both name and lang
+  // Step 1: Try to find a voice that matches one of the bot's voice names and is in English
   for (let voiceName of voiceNames) {
     selectedVoice = voices.find((voice) => {
       return voice.name === voiceName && voice.lang.startsWith("en"); // Match voice name and check if the lang starts with 'en'
@@ -28,7 +30,18 @@ function speakBotMessage(message) {
     if (selectedVoice) break; // Stop searching once a match is found
   }
 
-  // If no voice has been selected, pick an English-speaking voice by default
+  // Step 2: If no voice by name is found, find a voice based on the bot's gender and is English
+  if (!selectedVoice) {
+    selectedVoice = voices.find((voice) => {
+      const isEnglish = voice.lang.startsWith("en");
+      const isCorrectGender =
+        (botGender === "male" && voice.name.toLowerCase().includes("male")) ||
+        (botGender === "female" && voice.name.toLowerCase().includes("female"));
+      return isEnglish && isCorrectGender;
+    });
+  }
+
+  // Step 3: If still no voice is found, fall back to any available English voice
   if (!selectedVoice) {
     selectedVoice = voices.find((voice) => voice.lang.startsWith("en"));
   }
@@ -173,28 +186,32 @@ function getBotCategories() {
           "Sandy (English (United Kingdom))",
           "Sandy",
           "Microsoft Maisie Online (Natural) - English (United Kingdom)"
-        ]
+        ],
+        gender: "female"
       },
       {
         name: "Giga Gizmo",
         image: "./images/cartoon/cartoon2.jpg",
         personality:
           "a curious and inquisitive personality, asking lots of questions like a child.",
-        voiceName: ["Flo (English (United Kingdom))", "Flo"]
+        voiceName: ["Flo (English (United Kingdom))", "Flo"],
+        gender: "female"
       },
       {
         name: "Circuit Buddy",
         image: "./images/cartoon/cartoon3.jpg",
         personality:
           "a caring, friendly and helpful personality, like a kindergarten teacher.",
-        voiceName: ["Eddy (English (United Kingdom))", "Eddy"]
+        voiceName: ["Eddy (English (United Kingdom))", "Eddy"],
+        gender: "male"
       },
       {
         name: "Pixel Bot Bubbles",
         image: "./images/cartoon/cartoon4.jpg",
         personality:
           "a nerdy but charming personality, loves technology and able to explain to a 5-year-old child. Likes to explain and only talk about technology",
-        voiceName: ["Bubbles"]
+        voiceName: ["Bubbles"],
+        gender: "female"
       }
     ],
     female: [
@@ -206,7 +223,8 @@ function getBotCategories() {
           "Google UK English Female",
           "Microsoft Libby Online (Natural) - English (United Kingdom)",
           "Samantha"
-        ]
+        ],
+        gender: "female"
       },
       {
         name: "Seraphina Byte",
@@ -216,7 +234,8 @@ function getBotCategories() {
           "Google US English",
           "Microsoft Michelle Online (Natural) - English (United States)",
           "Karen"
-        ]
+        ],
+        gender: "female"
       },
       {
         name: "Nebula Nova",
@@ -226,7 +245,8 @@ function getBotCategories() {
           "Google US English",
           "Microsoft Sonia Online (Natural) - English (United Kingdom)",
           "Samantha"
-        ]
+        ],
+        gender: "female"
       },
       {
         name: "Katarina Quantum",
@@ -236,7 +256,8 @@ function getBotCategories() {
           "Martha",
           "Microsoft Sonia Online (Natural) - English (United Kingdom)",
           "Moira"
-        ]
+        ],
+        gender: "female"
       }
     ],
     male: [
@@ -248,7 +269,8 @@ function getBotCategories() {
           "Aaron",
           "Microsoft Ryan Online (Natural) - English (United Kingdom)",
           "Eddy"
-        ]
+        ],
+        gender: "male"
       },
       {
         name: "Titanium Ace67",
@@ -259,7 +281,8 @@ function getBotCategories() {
           "Daniel (English (United Kingdom))",
           "Daniel",
           "Microsoft Thomas Online (Natural) - English (United Kingdom)"
-        ]
+        ],
+        gender: "male"
       },
       {
         name: "Robo Ranger170",
@@ -270,7 +293,8 @@ function getBotCategories() {
           "Arthur",
           "Fred",
           "Microsoft Thomas Online (Natural) - English (United Kingdom)"
-        ]
+        ],
+        gender: "male"
       },
       {
         name: "Steel GuardianE23",
@@ -281,7 +305,8 @@ function getBotCategories() {
           "Google UK English Male",
           "Microsoft Thomas Online (Natural) - English (United Kingdom)",
           "Daniel"
-        ]
+        ],
+        gender: "male"
       }
     ],
     other: [
@@ -293,7 +318,8 @@ function getBotCategories() {
         voiceName: [
           "Zarvox",
           "Microsoft BrianMultilingual Online (Natural) - English (United States)"
-        ]
+        ],
+        gender: "male"
       },
       {
         name: "Pascal Surge",
@@ -303,7 +329,8 @@ function getBotCategories() {
         voiceName: [
           "Boing",
           "Microsoft BrianMultilingual Online (Natural) - English (United States)"
-        ]
+        ],
+        gender: "male"
       },
       {
         name: "Oracle Jester Joker",
@@ -312,14 +339,16 @@ function getBotCategories() {
         voiceName: [
           "Jester",
           "Microsoft Carlos Online (Natural) - Spanish (Honduras)"
-        ]
+        ],
+        gender: "male"
       },
       {
         name: "Cobol Yoda Walker",
         image: "./images/otherbots/other4.jpg",
         personality:
           "a very wise character like Yoda from Star Wars. He will give advice",
-        voiceName: ["Albert"]
+        voiceName: ["Albert"],
+        gender: "male"
       }
     ],
     scary: [
@@ -328,27 +357,31 @@ function getBotCategories() {
         image: "./images/scary/scary1.jpg",
         personality:
           "a terrifying and intimidating personality, inducing fear. He will scare you",
-        voiceName: ["Bahh"]
+        voiceName: ["Bahh"],
+        gender: "male"
       },
       {
         name: "Hidargo T9675",
         image: "./images/scary/scary2.jpg",
         personality:
           "a cold and ruthless personality, a killing terminator. He wants to kill you",
-        voiceName: ["Ralph"]
+        voiceName: ["Ralph"],
+        gender: "male"
       },
       {
         name: "CazTer Terror",
         image: "./images/scary/scary3.jpg",
         personality:
           "a chaotic and unpredictable personality, causing terror. He wants to make you his slave.",
-        voiceName: ["Whisper"]
+        voiceName: ["Whisper"],
+        gender: "male"
       },
       {
         name: "Cyber Reaper",
         image: "./images/scary/scary4.jpg",
         personality: "a grim and ominous personality, he likes to eat people.",
-        voiceName: ["Bad News"]
+        voiceName: ["Bad News"],
+        gender: "male"
       }
     ]
   };
