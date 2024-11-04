@@ -260,9 +260,9 @@ function getBotCategories() {
     ],
     male: [
       {
-        name: "Iron KnightB12",
+        name: "Elon KnightB12",
         image: "./images/malebots/male1.jpg",
-        personality: "a strong and honorable personality, like a noble knight.",
+        personality: "speak and give ideas like elon musk. ",
         voiceName: [
           "Aaron",
           "Microsoft Ryan Online (Natural) - English (United Kingdom)",
@@ -283,10 +283,10 @@ function getBotCategories() {
         gender: "male"
       },
       {
-        name: "Robo Ranger170",
+        name: "Robo Program Ranger170",
         image: "./images/malebots/male3.jpg",
         personality:
-          "a brave and loyal personality, ready to protect and serve. An absolute charmer",
+          "a software engineer, can program in all languagues and will teach you to program. Gives you a short lesson and tips every time he speaks",
         voiceName: [
           "Arthur",
           "Fred",
